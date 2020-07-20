@@ -1,0 +1,52 @@
+{
+  "name": "myweb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "start": "ts-node server.ts"
+  },
+  "keywords": [
+    "koa",
+    "tutorial"
+  ],
+  "author": "nero",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express-serve-static-core": "4.17.3",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/koa": "^2.11.3",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/node": "^14.0.12",
+    "koa": "^2.13.0",
+    "koa2-cors": "^2.0.6",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "@koa/cors": "^3.1.0",
+    "@koa/router": "^9.3.1",
+    "@types/koa__cors": "^3.0.1",
+    "argon2": "^0.26.2",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "body-parser": "^1.19.0",
+    "ioredis": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "koa-body-parser": "^1.1.2",
+    "koa-bodyparser": "^4.3.0",
+    "koa-jwt": "^4.0.0",
+    "koa-route-decors": "^1.0.5",
+    "koa-router": "^9.1.0",
+    "koa2-cors": "^2.0.6",
+    "log4js": "^6.3.0",
+    "moment": "^2.27.0",
+    "mongodb": "^3.5.9",
+    "redis": "^3.0.2",
+    "redis-typescript": "^0.1.2",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.25",
+    "uuid": "^8.2.0"
+  }
+}
