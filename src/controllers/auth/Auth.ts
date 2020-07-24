@@ -1,10 +1,13 @@
-import { Context } from 'koa';
 import jwt = require('jsonwebtoken');
+
+import { Context } from 'koa';
+
 import { JWT_SECRET } from '../../config/Constants';
-import { AccountService } from '../../service/Auth';
+import { TokenConfig } from '../../config/Type';
 import { post } from '../../decorator/httpMethod';
-import { successData } from '../../utils/returnResult';
+import { AccountService } from '../../service/Auth';
 import { Validate } from '../../utils/ReqValidate';
+import { successData } from '../../utils/returnResult';
 
 /**
  * Created by wh on 2020/7/15
@@ -12,39 +15,49 @@ import { Validate } from '../../utils/ReqValidate';
  * @desc：登陆注册Controllers
  */
 export default class AuthController {
-  /**
-   * 登录接口Controller
-   * @param ctx koa中间件
-   */
-  @post('/login')
-  public async login(ctx: Context) {
+	/**
+	 * 逻辑处理service类
+	 */
+	private readonly service: AccountService;
 
-    // 验证
-    Validate.user(ctx.request.body.username, ctx.request.body.password);
-    const service = new AccountService();
-    const user = await service.verifyPassword(ctx.request.body.username, ctx.request.body.password)
-    // 设置10小时过期时间
-    const token = jwt.sign({
-      exp: Math.floor(Date.now() / 1000) + (600 * 60),
-      data: { 'id': user.id }
-    }, JWT_SECRET)
-    return ctx.body = successData({ 'token': token, user })
-  }
-  /**
-   * 注册接口Controller
-   * @param ctx koa中间件
-   */
-  @post('/register')
-  public async register(ctx: Context) {
+	constructor () {
+		this.service = new AccountService();
+	}
 
-    Validate.user(ctx.request.body.username, ctx.request.body.password);
-    const service = new AccountService();
-    const user = await service.insert(ctx.request.body.username, ctx.request.body.password)
-    // 设置10小时过期时间
-    const token = jwt.sign({
-      exp: Math.floor(Date.now() / 1000) + (600 * 60),
-      data: { 'id': user.id }
-    }, JWT_SECRET)
-    return ctx.body = successData({ 'token': token, user })
-  }
+	/**
+	 * 登录接口Controller
+	 * @param ctx koa中间件
+	 */
+	@post('/login')
+	public async login (ctx: Context) {
+		// 验证
+		Validate.user(ctx.request.body.username, ctx.request.body.password);
+		const user = await this.service.verifyPassword(ctx.request.body.username, ctx.request.body.password);
+		// 设置10小时过期时间
+		const tconfig: TokenConfig = {
+			"exp": Math.floor(Date.now() / 1000) + 600 * 60,
+			"data": { "id": user.id },
+		};
+		const token = jwt.sign(tconfig, JWT_SECRET);
+
+		return (ctx.body = successData({ "token": token, user }));
+	}
+
+	/**
+	 * 注册接口Controller
+	 * @param ctx koa中间件
+	 */
+	@post('/register')
+	public async register (ctx: Context) {
+		Validate.user(ctx.request.body.username, ctx.request.body.password);
+		const user = await this.service.insert(ctx.request.body.username, ctx.request.body.password);
+		// 设置10小时过期时间
+		const tconfig: TokenConfig = {
+			"exp": Math.floor(Date.now() / 1000) + 600 * 60,
+			"data": { "id": user.id },
+		};
+		const token = jwt.sign(tconfig, JWT_SECRET);
+
+		return (ctx.body = successData({ "token": token, user }));
+	}
 }

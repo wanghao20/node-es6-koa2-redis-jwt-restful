@@ -1,208 +1,59 @@
 {
-
-    "defaultSeverity": "error",
-	"extends": [
-		"tslint:recommended"
-    ],
-
-    // 强制单行注释格式：'//' 后必跟空格
-    "comment-format": [
-        true,
-        "check-space"
-    ],
-    // 任何情况下，if / for / do / while 后必须通过 {} 包裹代码块
-    "curly": true,
-    // 文件必须用新的行结束
-    "eofline": true,
-    // 当使用 for in 语句遍历 object 时，强制使用 if 判断 key 是否由原型链继承 hasOwnProperty
-    "forin": true,
-    // 禁止数组中的模块全量引入，如：rxjs，需要导入其具体子模块
-    "import-blacklist": [
-        true,
-        "rxjs/Rx"
-    ],
-    // import { ModuleName } 确保 ModuleName 两端留有空格
-    "import-spacing": true,
-    // 检查代码缩紧，采用空格作为缩进单位
-    "indent": [
-        true,
-        "spaces"
-    ],
-    // 声明 interface 接口，代替 type 关键字声明类型
-    "interface-over-type-literal": true,
-    // ？label 是个什么东西？只允许 labels 在 do / for / while / switch 的声明中
-    "label-position": true,
-    // 一个文件最多定义一个 class，保证单一职责
-    "max-classes-per-file": [
-        false
-    ],
-    // 一行代码长度最长不超过 140 字符
-    "max-line-length": [
-        true,
-        140
-    ],
-    // 不强制要求 class 的成员声明，例如：private || public
-    "member-access": false,
-    // 要求 class 内成员的声明顺序，不能乱放，静态属性，实例属性，静态方法，实例方法
-    "member-ordering": [
-        true,
-        {
-            "order": [
-                "static-field",
-                "instance-field",
-                "static-method",
-                "instance-method"
-            ]
-        }
-    ],
-    // 不允许使用 arguments.callee
-    "no-arg": true,
-    // 禁止使用位操作符，
-    // Specifically, the following bitwise operators are banned: &, &=, |, |=, ^, ^=, <<, <<=, >>, >>=, >>>, >>>=, and ~.
-    // This rule does not ban the use of & and | for intersection and union types.
-    "no-bitwise": true,
-    // 不许用 new Number() String Boolean 等基础类型的构造函数，允许使用函数式调用 Number(<string>)
-    // More details: https://stackoverflow.com/questions/4719320/new-number-vs-number
-    "no-construct": true,
-    // 不许用 debugger
-    "no-debugger": true,
-    // 不允许两次调用 super 函数
-    "no-duplicate-super": true,
-    // 不许有空代码块 {}
-    "no-empty": false,
-    // 不许有空接口
-    "no-empty-interface": true,
-    // 不许用 eval 函数
-    "no-eval": true,
-    // 声明立即被赋值的基础类型不需要声明变量类型，let state: boolean = false 删除类型声明
-    "no-inferrable-types": [
-        true,
-        "ignore-params"
-    ],
-    // 不要为 interface 定义 constructor 函数
-    "no-misused-new": true,
-    // Disallows non-null assertions using the ! postfix operator.
-    // 不许使用 params1!.func() 的语法校验参数值是否存在
-    "no-non-null-assertion": true,
-    // 不允许子作用域与外层作用域声明同名变量，
-    // (instance, instances) => {return instances.filter((instance)=>instance.neighbors.includes(instance))}
-    // Disallows shadowing variable declarations.
-    "no-shadowed-variable": true,
-    // 推荐使用 obj.property 代替 obj["property"]，但是 obj["prop-erty"] 是被允许的
-    "no-string-literal": false,
-    // 不允许直接 throw 一个字符串字面量
-    // if (!productToAdd) {
-    // throw new Error("How can I add new product when no value provided?");
-    // }
-    "no-string-throw": true,
-    // 不允许使用 fall through，两个 switch case 之间没有 break 做分割
-    "no-switch-case-fall-through": true,
-    // 代码行尾不允许有空格
-    "no-trailing-whitespace": true,
-    // 不允许做 var|let unn = undefined 这种无意义赋值
-    "no-unnecessary-initializer": true,
-    // 禁止 unused expression
-    // 参考：https://eslint.org/docs/rules/no-unused-expressions
-    "no-unused-expression": true,
-    // 禁止声明前使用变量，针对 var 变量提升问题
-    "no-use-before-declare": true,
-    // 不许使用 var 声明变量
-    "no-var-keyword": true,
-    // Checks ordering of keys in object literals.
-    // 检查对象 key 的声明顺序
-    "object-literal-sort-keys": false,
-    // 检查流程控制代码的衔接部分和空格
-    "one-line": [
-        true,
-        "check-open-brace",
-        "check-catch",
-        "check-else",
-        "check-whitespace"
-    ],
-    // 优先使用 const 声明变量
-    "prefer-const": true,
-    // 字符串字面量需要使用 单引号 包裹
-    "quotemark": [
-        true,
-        "double"
-    ],
-    // 使用 parseInt 时需要定义 radix 参数
-    "radix": true,
-    // 每个声明后强制 ;
-    "semicolon": [
-        true,
-        "always"
-    ],
-    // 强制用 === 替换 ==
-    "triple-equals": [
-        true,
-        "allow-null-check"
-    ],
-    // 冒号左侧的空格数量，下面的列表中全部不要空格，
-    // "call-signature" checks return type of functions.
-    // "index-signature" checks index type specifier of indexers.
-    // "parameter" checks function parameters.
-    // "property-declaration" checks object property declarations.
-    // "variable-declaration" checks variable declaration.
-    "typedef-whitespace": [
-        true,
-        {
-            "call-signature": "nospace",
-            "index-signature": "nospace",
-            "parameter": "nospace",
-            "property-declaration": "nospace",
-            "variable-declaration": "nospace"
-        }
-    ],
-    // 校验两个重载函数是否可以通过 ;;rest 参数合并 (...params) => arguments
-    "unified-signatures": true,
-    // 校验变量名起的有没有问题，大小驼峰命名，过滤保留关键字
-    // "variable-name": false,
-    "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
-    // 强制空格用法，
-    // if else for while 后面接一个空格
-    // 变量赋值的 = 两侧加空格
-    // 运算符两侧加空格
-    // 分隔符后加空格，<,|/|;>
-    // 变量类型声明前加空格
-    "whitespace": [
-        true,
-        "check-branch",
-        "check-decl",
-        "check-operator",
-        "check-separator",
-        "check-type"
-    ],
-    // FROM Codelyzer: Angular 表达式内的空格检查
-    // ? checks for whitespace before and after the interpolation characters
-    "angular-whitespace": [
-        true,
-        "check-interpolation"
-    ],
-    // Disallows using of ViewEncapsulation.None
-    // ？不允许视图封装.None？
-    "use-view-encapsulation": true,
-    // 确保正确的生命周期函数声明
-    "contextual-life-cycle": true,
-    // ? () 需要包裹在 [] 内
-    "banana-in-box": true,
-    // 事件绑定不使用 'on-' 前缀
-    "no-output-on-prefix": true,
-    // 使用 class 中的 @Input 声明输入属性，而不是在元数据结构中
-    "use-input-property-decorator": true,
-    // 同上，使用 @output 声明对外输出的数据变量
-    "use-output-property-decorator": true,
-    // 使用 @HostProperty 而不是声明元数据
-    "use-host-property-decorator": true,
-    // 禁止输入属性重命名
-    "no-input-rename": true,
-    // 同上，output
-    "no-output-rename": true,
-    // 显式声明组件实例化使用的 生命周期钩子函数
-    "use-life-cycle-interface": true,
-    // 管道指令需要声明实现 PipeTransform 接口
-    "use-pipe-transform-interface": true,
-    // 组件和指令命名，需要包含关键字 'Component' || 'Direction'
-    "component-class-suffix": true,
-    "directive-class-suffix": true
+	// 这里填入你的项目需要的个性化配置，比如：
+	"rules": {
+		"member-access": true, // 必须设置类的成员的可访问性
+		"no-any": false, // 禁止使用 any
+		"no-inferrable-types": true, //禁止给一个初始化时直接赋值为 number, string 或 boolean 的变量显式的指定类型
+		"no-internal-module": true, //禁止使用 module 来定义命名空间
+		"only-arrow-functions": false, //必须使用箭头函数，除非是单独的函数声明或是命名函数
+		"curly": true, //if 后面必须有 {，除非是单行 if
+		"label-position": true, //只允许在 do, for, while 或 switch 中使用 label
+		"no-duplicate-variable": true, //禁止出现重复的变量定义或函数参数名
+		"no-empty": true, //禁止出现空代码块，允许 catch 是空代码块
+		"no-return-await": true, //禁止没必要的 return await
+		"no-var-keyword": true, //禁止使用 var
+		"prefer-conditional-expression": true, //可以用三元表达式时，就不用 if else
+		"strict-boolean-expressions": false, //在分支条件判断中必须传入布尔类型的值
+		"cyclomatic-complexity": true, //	禁止函数的循环复杂度超过 20，详见 https://en.wikipedia.org/wiki/Cyclomatic_complexity
+		"eofline": true, //文件最后一行必须有一个空行
+		"indent": true, //一个缩进必须用四个空格替代
+		"prefer-const": true, //申明后不再被修改的变量必须使用 const 来申明
+		"prefer-readonly": true, //如果私有变量只在构造函数中被赋值，则必须使用 readonly 修饰符
+		"align": true, //变量定义需要竖向对其
+		"array-type": false, //限制必须使用 T[] 或 Array<T> 之中的一种来定义数组的类型
+		"arrow-parens": true, //箭头函数的参数必须有小括号
+		"binary-expression-operand-order": true, //数字字面量必须在加号的右边，即禁止 1 + x
+		"class-name": true, //类名与接口名必须为驼峰式
+		"completed-docs": true, //类、函数等必须写注释
+		"import-spacing": true, //import 语句中，关键字之间的间距必须是一个空格
+		"new-parens": true, //new 后面只必须有一个空格
+		"newline-before-return": true, //return 语句前必须有空行
+		"no-boolean-literal-compare": true, //禁止变量与 true 或 false 比较
+		"no-consecutive-blank-lines": true, //禁止连续超过三行空行
+		"no-trailing-whitespace": true, //禁止行尾有空格
+		"object-literal-key-quotes": true, //对象的 key 必须用引号包起来
+		"ordered-imports": false, //import 必须排序
+		"prefer-template": false, //必须使用模版字符串而不是字符串连接
+		"space-before-function-paren": false, //函数名前必须有空格
+		"space-within-parens": true, //	括号内首尾禁止有空格
+		"type-literal-delimiter": true, //字面类型的每个成员都必须有分号
+		"variable-name": true, //限制变量命名规则
+		// 强制单行注释格式：'//' 后必跟空格
+		"comment-format": [true, "check-space"],
+		// 要求 class 内成员的声明顺序，不能乱放，静态属性，实例属性，静态方法，实例方法
+		"member-ordering": [
+			true,
+			{
+				"order": ["static-field", "instance-field", "static-method", "instance-method"]
+			}
+		],
+		// 每个声明后强制 ;
+		"semicolon": true,
+		// 强制用 === 替换 ==
+		"triple-equals": [true, "allow-null-check"]
+	},
+	// 不需要验证的文件夹
+	"linterOptions": {
+		"exclude": ["node_modules", "bin/*"]
+	}
 }

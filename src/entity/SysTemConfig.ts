@@ -1,4 +1,4 @@
-import { Entity,  ObjectIdColumn, Column } from "typeorm";
+import { Column, Entity, ObjectIdColumn } from 'typeorm';
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -6,9 +6,14 @@ import { Entity,  ObjectIdColumn, Column } from "typeorm";
  */
 @Entity()
 export class SysTemConfig {
-  @ObjectIdColumn()
-  id: string;
-  @Column()
-  fieldList: [];
-
+        /**
+         * id
+         */
+	@ObjectIdColumn()
+        public id: string;
+        /**
+         * 字段列表
+         */
+	@Column()
+	public fieldList: [];
 }

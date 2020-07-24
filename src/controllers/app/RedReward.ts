@@ -1,52 +1,58 @@
 import { Context } from 'koa';
-import { RedRewardService } from '../../service/RedReward';
+
 import { get, post } from '../../decorator/httpMethod';
-import { successData } from '../../utils/returnResult';
+import { RedRewardService } from '../../service/RedReward';
 import { Validate } from '../../utils/ReqValidate';
+import { successData } from '../../utils/returnResult';
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
  * @desc：红包Controller
  */
 export default class RedRewardController {
+	/**
+	 * 逻辑处理service类
+	 */
+	private readonly service: RedRewardService;
 
-    /**
-     * 通过userID查询红包
-     * @param ctx koa中间件
-     */
-    @get('/red_envelope')
-    public async findRedRewardList(ctx: Context) {
+	constructor() {
+		this.service = new RedRewardService();
+	}
 
-        Validate.isId(ctx.request.query.uid);
-        const service = new RedRewardService();
-        const redRewardList = await service.findRedRewardList(ctx.request.query.uid);
-        return ctx.body = successData(redRewardList)
-    }
-    /**
-     * 通过userID查询红包
-     * @param ctx koa中间件
-     */
-    @get('/red_envelope_record')
-    public async findredEnvelopeRecordList(ctx: Context) {
+	/**
+	 * 通过userID查询红包
+	 * @param ctx koa中间件
+	 */
+	@get('/red_envelope')
+	public async findRedRewardList(ctx: Context) {
+		Validate.isId(ctx.request.query.uid);
+		const redRewardList = await this.service.findRedRewardList(ctx.request.query.uid);
 
-        Validate.isId(ctx.request.query.uid);
-        const service = new RedRewardService();
-        const redRewardList = await service.findredEnvelopeRecordList(ctx.request.query.uid);
-        return ctx.body = successData(redRewardList)
-    }
-    /**
-     * 领取红包
-     * @param ctx koa中间件
-     */
-    @post('/get_red_envelope')
-    public async getRedEnvelope(ctx: Context) {
+		return (ctx.body = successData(redRewardList));
+	}
 
-        Validate.isId(ctx.request.body.uid);
-        Validate.isId(ctx.request.body.rid);
-        const service = new RedRewardService();
-        const obj = await service.getRedEnvelope(ctx.request.body.uid, ctx.request.body.rid);
-        return ctx.body = successData(obj)
-    }
+	/**
+	 * 通过userID查询红包
+	 * @param ctx koa中间件
+	 */
+	@get('/red_envelope_record')
+	public async findredEnvelopeRecordList(ctx: Context) {
+		Validate.isId(ctx.request.query.uid);
+		const redRewardList = await this.service.findredEnvelopeRecordList(ctx.request.query.uid);
 
+		return (ctx.body = successData(redRewardList));
+	}
 
+	/**
+	 * 领取红包
+	 * @param ctx koa中间件
+	 */
+	@post('/get_red_envelope')
+	public async getRedEnvelope(ctx: Context) {
+		// Validate.isId(ctx.request.body.uid);
+		Validate.isId(ctx.request.body.rid);
+		const obj = await this.service.getRedEnvelope(ctx.request.body.uid, ctx.request.body.rid);
+
+		return (ctx.body = successData(obj));
+	}
 }
