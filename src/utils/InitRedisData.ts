@@ -7,8 +7,8 @@ import { KeyName } from '../config/RedisKeys';
 
 import { DrawReward } from '../config/Type';
 import { DrawRewardEntity } from '../entity/DrawRewardEntity';
-import { logError } from './logger';
-import { redisDb1 } from './redisTool';
+import { logError } from './Logger';
+import { redisDb1 } from './RedisTool';
 /**
  * Created by wh on 2020/7/15
  * author: wanghao

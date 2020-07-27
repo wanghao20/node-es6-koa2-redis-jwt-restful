@@ -4,7 +4,7 @@ import crypto = require('crypto');
 
 import fs = require('fs');
 import NodeRSA = require('node-rsa');
-import Keys = require('../config/keys');
+import Keys = require('../config/Keys');
 /**
  * RSA加密/解密非常慢且占用大量CPU。先使用对称算法（AES）对大输入文件进行加密，
  * 然后再使用(非对称加密)RSA密钥对该算法使用的密钥进行加密

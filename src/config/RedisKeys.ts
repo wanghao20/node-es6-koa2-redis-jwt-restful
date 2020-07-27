@@ -19,10 +19,10 @@ export class KeyName {
 	/**
 	 * 等级奖励配置
 	 */
-        public static STR_CONFIG_GRAEDEVOTE = 'STR:CONGIF:GRAEDEVOTE:';
-        /**
-         * 2
-         */
+	public static STR_CONFIG_GRAEDEVOTE = 'STR:CONGIF:GRAEDEVOTE:';
+	/**
+	 * 2
+	 */
 	public static SET_CONFIG_GRAEDEVOTE = 'SET:CONGIF:GRAEDEVOTE';
 	/**
 	 * 已经领取红包列表
@@ -32,8 +32,8 @@ export class KeyName {
 	 * set型数据
 	 */
 	/**
-         * 玩家数据
-         */
+	 * 玩家数据
+	 */
 	public static HASH_OBJ_GAME_USERS = 'HASH:OBJ:GAME_USERS:';
 
 	// 每日清空数据
@@ -62,15 +62,13 @@ export class KeyName {
 	 * @param uid 用户ID
 	 */
 	public static SET_OBJ_DRAW_LOG_ID(uid: string) {
-                return `SET:OBJ:DRAW_LOG:${uid}`;
-        }
+		return `SET:OBJ:DRAW_LOG:${uid}`;
+	}
 
-        /**
-         * 存储了App的信息在此
-         */
-        public static HASH_OBJ_APPINFO(appid: string) {
-                return `HASH:OBJ:APPINFO:${appid}`;
-
-                                }
-
+	/**
+	 * 存储了App的信息在此
+	 */
+	public static HASH_OBJ_APPINFO(appid: string) {
+		return `HASH:OBJ:APPINFO:${appid}`;
+	}
 }

@@ -1,6 +1,7 @@
 import { KeyName } from '../config/RedisKeys';
-import { VerifyException } from '../utils/exceptions';
-import { redisDb1 } from '../utils/redisTool';
+import { VerifyException } from '../utils/Exceptions';
+import { redisDb1 } from '../utils/RedisTool';
+import { StaticStr } from '../config/StaticStr';
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -16,7 +17,7 @@ export class SystemService {
 		if (system) {
 			return system;
 		}
-		throw new VerifyException('系统设置不存在', 302);
+		throw new VerifyException(StaticStr.ERR_MSG_SYS_F,  StaticStr.ERR_CODE_DEFAULT);
 	}
 
 	/**

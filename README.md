@@ -22,6 +22,7 @@ reids ~
 #### ├── Readme.md                   // help
 #### ├── logs                        // 日志
 #### ├── src                         // 主程序
+#### │   ├── cert                    // 证书保存文件
 #### │   ├── config                  // 项目配置类
 #### │   │   ├── Base.ts             // 项目基础配置
 #### │   │   ├── Constants.ts        // jwt秘钥和ROUTER_MAP

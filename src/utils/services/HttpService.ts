@@ -31,7 +31,7 @@ export class HttpService {
 		});
 	}
 	/**
-	 * get，请求后台
+	 * get，请求数据
 	 * @param url
 	 */
 	public static async get(url: string) {

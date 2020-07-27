@@ -50,7 +50,9 @@
 		// 每个声明后强制 ;
 		"semicolon": true,
 		// 强制用 === 替换 ==
-		"triple-equals": [true, "allow-null-check"]
+		"triple-equals": [true, "allow-null-check"],
+                // 字符串字面量需要使用 单引号 包裹
+                "quotemark": [true, "double"]
 	},
 	// 不需要验证的文件夹
 	"linterOptions": {

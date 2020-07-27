@@ -51,11 +51,10 @@ export default class WeChatController {
 	public async transfers(ctx: Context) {
 		Validate.isId(ctx.request.body.appid);
 		Validate.isId(ctx.request.body.openid);
-		Validate.isValid(ctx.request.body.orderno);
 		Validate.isNumber(ctx.request.body.amount);
 		const enAccountTransfer: EnAccountTransfer = ctx.request.body;
-		const state = await this.service.transfers(enAccountTransfer);
+		const data = await this.service.transfers(enAccountTransfer);
 
-		return (ctx.body = successData(state));
+		return (ctx.body = successData(data));
 	}
 }

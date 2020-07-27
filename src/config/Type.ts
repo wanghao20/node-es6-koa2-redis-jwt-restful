@@ -96,7 +96,7 @@ type DrawReward = {
 	devote: number;
 };
 /**
- *企业号转账
+ *企业号转账后台接收参数
  */
 type EnAccountTransfer = {
 	/**
@@ -108,13 +108,63 @@ type EnAccountTransfer = {
 	 */
 	openid: string;
 	/**
-	 * 订单号
-	 */
-	orderno: any;
-	/**
 	 * 金额
 	 */
 	amount: any;
 };
+/**
+ *代理选项
+ */
+type AgentOptionsTy = {
+	/**
+	 * pfx证书
+	 */
+	pfx: Buffer;
+	/**
+	 * 企业转账商户号id(涉及支付)
+	 */
+	passphrase: string;
+};
+/**
+ *企业号转账POST请求发出参数
+ */
+type PreArray = {
+	/**
+	 * appid
+	 */
+	mch_appid?: string;
+	/**
+	 * 微信支付商户号
+	 */
+	mchid?: string;
+	/**
+	 * 随机字符串
+	 */
+	nonce_str?: string;
+	/**
+	 * 订单号
+	 */
+	partner_trade_no?: string;
+	/**
+	 * openid
+	 */
+	openid?: string;
+	/**
+	 * 是否检查name
+	 */
+	check_name?: string;
+	/**
+	 * 金额
+	 */
+        amount?: string;
+	/**
+	 * 备注
+	 */
+        desc?: string;
+	/**
+	 * 客户端ip
+	 */
+        spbill_create_ip?: string;
+};
 
-export { ResData, RouteMeta, TokenConfig, AttackDate, DrawReward, EnAccountTransfer };
+export { ResData, RouteMeta, TokenConfig, AttackDate, DrawReward, EnAccountTransfer,PreArray,AgentOptionsTy };

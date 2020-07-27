@@ -1,8 +1,9 @@
 import argon2 = require('argon2');
 import { v4 as uuidv4 } from 'uuid';
 import { KeyName } from '../config/RedisKeys';
-import { VerifyException } from '../utils/exceptions';
-import { redisDb1 } from '../utils/redisTool';
+import { VerifyException } from '../utils/Exceptions';
+import { redisDb1 } from '../utils/RedisTool';
+import { StaticStr } from '../config/StaticStr';
 
 /**
  * Created by wh on 2020/7/15
@@ -20,10 +21,10 @@ export class AccountService {
 		const pwd = await redisDb1.hget(KeyName.HASH_AUTH_USER + userName, 'passWord');
 		const uid = await redisDb1.hget(KeyName.HASH_AUTH_USER + userName, 'id');
 		if (name !== userName) {
-			throw new VerifyException('用户名或密码错误', 302);
+			throw new VerifyException(StaticStr.USERNAME_ERR_MSG, StaticStr.ERR_CODE_DEFAULT);
 		}
 		if (!(await argon2.verify(pwd, passWord))) {
-			throw new VerifyException('用户名或密码错误', 302);
+			throw new VerifyException(StaticStr.USERNAME_ERR_MSG,  StaticStr.ERR_CODE_DEFAULT);
 		}
 
 		return { "id": uid, "name": userName };
@@ -37,7 +38,7 @@ export class AccountService {
 	public async insert(userName: string, passWord: string) {
 		const name = await redisDb1.hget(KeyName.HASH_AUTH_USER + userName, 'name');
 		if (name === userName) {
-			throw new VerifyException('用户已存在', 302);
+			throw new VerifyException(StaticStr.INSERT_ERR_MSG,  StaticStr.ERR_CODE_DEFAULT);
 		} else {
 			const uid = uuidv4();
 			// 保存到数据库

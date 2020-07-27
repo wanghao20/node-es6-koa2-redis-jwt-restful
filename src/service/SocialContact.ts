@@ -3,7 +3,7 @@ import { GlobalVar } from '../config/GlobalVar';
 import { KeyName } from '../config/RedisKeys';
 import { ArmyList, Expeditions } from '../config/ReturnFormat';
 import { AttackDate } from '../config/Type';
-import { redisDb1 } from '../utils/redisTool';
+import { redisDb1 } from '../utils/RedisTool';
 /**
  * Created by wh on 2020/7/15
  * author: wanghao

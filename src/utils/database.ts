@@ -1,6 +1,6 @@
 import { ConnectionOptions, createConnection } from 'typeorm';
-import { mongodbConfig, mysqlConfig } from '../config/environments';
-import { logError } from './logger';
+import { mongodbConfig, mysqlConfig } from '../config/Environments';
+import { logError } from './Logger';
 
 /**
  * Created by wh on 2020/7/15

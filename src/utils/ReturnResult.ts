@@ -1,4 +1,5 @@
 import { ResData } from '../config/Type';
+import { StaticStr } from '../config/StaticStr';
 
 /**
  * Created by wh on 2020/7/15
@@ -22,7 +23,7 @@ const successData = (data?: any) => {
  * @param _code code
  */
 const errorMsg = (msg?: string, code?: number) => {
-	const obj: ResData = { "code": code || 302, "msg": msg || '服务器错误!' ,};
+	const obj: ResData = { "code": code || StaticStr.ERR_CODE_DEFAULT, "msg": msg || '服务器错误!' };
 
 	return obj;
 };

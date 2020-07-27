@@ -2,8 +2,9 @@ import { GlobalVar } from '../config/GlobalVar';
 import { KeyName } from '../config/RedisKeys';
 import { RedEnvelopeVal } from '../config/ReturnFormat';
 import { DateFormat } from '../utils/DateFormat';
-import { VerifyException } from '../utils/exceptions';
-import { redisDb1 } from '../utils/redisTool';
+import { VerifyException } from '../utils/Exceptions';
+import { redisDb1 } from '../utils/RedisTool';
+import { StaticStr } from '../config/StaticStr';
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -61,7 +62,7 @@ export class RedRewardService {
 		if (redEnvelopeList) {
 			return redEnvelopeList.sort((a: RedEnvelopeVal, b: RedEnvelopeVal) => a.isExpired - b.isExpired);
 		}
-		throw new VerifyException('暂时没有可用红包', 302);
+		throw new VerifyException(StaticStr.ERR_MSG_R, StaticStr.ERR_CODE_DEFAULT);
 	}
 
 	/**
@@ -94,7 +95,7 @@ export class RedRewardService {
 				// 判断领取倒计时是否结束
 				const hoursCount = DateFormat.dateCount(new Date(v.generateDate), date, 'hours');
 				if (hoursCount < 1) {
-					obj = { 'state': 'ip_43' };
+					obj = { "state": 'ip_43' };
 
 					return;
 				}
@@ -102,19 +103,19 @@ export class RedRewardService {
 				if (hoursCount > GlobalVar.ID101) {
 					v.isDelete = 1;
 					// 过期 删除该红包
-					obj = { 'state': 'ip_44' };
+					obj = { "state": 'ip_44' };
 
 					return;
 				}
 				// 判断红包是否已经被领取
 				if (v.isRobbed === 1) {
-					obj = { 'state': 'ip_45' };
+					obj = { "state": 'ip_45' };
 
 					return;
 				}
 				// 今日领取次数是否达上限
 				if (v.isRobbed >= GlobalVar.ID103) {
-					obj = { 'state': 'ip_45' };
+					obj = { "state": 'ip_45' };
 
 					return;
 				}
@@ -144,7 +145,7 @@ export class RedRewardService {
 					roleGrade = v.grade;
 				}
 				// 根据金币价值确定角色
-				obj = { 'state': '200', 'yuanBao': yuanBao, 'roleGrade': roleGrade };
+				obj = { "state": '200', "yuanBao": yuanBao, "roleGrade": roleGrade };
 			}
 		});
 

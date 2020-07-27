@@ -45,4 +45,23 @@ export class WeiChatUrlBaseConfig {
 	 * 微信网页授权所需的access_token，用于获取到用户的openid等信息
 	 */
 	public static webAuthTokenUrl: 'https://api.weixin.qq.com/sns/oauth2/access_token?';
+
+	/**
+	 *  第二步：通过code换取网页授权access_token的Url
+	 */
+	public static getAccessTokenUrl(appid: string, appSecret: string, code: string) {
+                const url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${appSecret}&code=${code}&grant_type=authorization_code`;
+
+		return url;
+        }
+
+	/**
+	 *  第三步：拉取用户信息的Url
+	 */
+	public static getUserInfoUrl(accessToken: string, openid: string, code: string) {
+		const url = `https://api.weixin.qq.com/sns/userinfo?access_token=?access_token=${accessToken}&openid=${openid}&code=${code}&&lang=zh_CN`;
+
+		return url;
+        }
+
 }

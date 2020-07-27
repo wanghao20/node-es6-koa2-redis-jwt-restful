@@ -1,3 +1,5 @@
+import { StaticStr } from "../config/StaticStr";
+
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -22,7 +24,7 @@ export class BaseException extends Error {
 export class VerifyException extends BaseException {
 	constructor(msg: string, code: number) {
 		super();
-		this.msg = msg || '信息错误';
+		this.msg = msg || StaticStr.DEFAULT;
 		this.code = code;
 	}
 }

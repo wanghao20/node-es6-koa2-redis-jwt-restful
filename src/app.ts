@@ -7,8 +7,8 @@ import 'reflect-metadata';
 import { BaseConfig } from './config/Base';
 import { addRouter } from './routes/Routes';
 import { InitRedisData } from './utils/InitRedisData';
-import { logError, logHttp } from './utils/logger';
-import { Filter } from './utils/reqfilter';
+import { logError, logHttp } from './utils/Logger';
+import { Filter } from './utils/Reqfilter';
 /**
  * Created by wh on 2020/7/15
  * author: wanghao

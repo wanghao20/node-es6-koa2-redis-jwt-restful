@@ -1,5 +1,6 @@
 import Joi = require('@hapi/joi');
-import { VerifyException } from './exceptions';
+import { VerifyException } from './Exceptions';
+import { StaticStr } from '../config/StaticStr';
 /**
  * Created by wh on 2020/7/18
  * author: wanghao
@@ -17,7 +18,7 @@ export class Validate {
 		});
 		const { error, value } = schema.validate({ "str": val });
 		if (error) {
-			throw new VerifyException('查询参数错误', 302);
+			throw new VerifyException(StaticStr.ERR_MSG_VERIFY_DEFAULT,  StaticStr.ERR_CODE_DEFAULT);
 		}
 	}
 
@@ -32,7 +33,7 @@ export class Validate {
 		});
 		const { error, value } = schema.validate({ "str": val });
 		if (error) {
-			throw new VerifyException('查询参数错误', 302);
+			throw new VerifyException(StaticStr.ERR_MSG_VERIFY_DEFAULT,  StaticStr.ERR_CODE_DEFAULT);
 		}
 	}
 
@@ -47,7 +48,7 @@ export class Validate {
 		});
 		const { error, value } = schema.validate({ "str": val });
 		if (error) {
-			throw new VerifyException('查询参数错误', 302);
+			throw new VerifyException(StaticStr.ERR_MSG_VERIFY_DEFAULT,  StaticStr.ERR_CODE_DEFAULT);
 		}
 	}
 	/**
@@ -61,7 +62,7 @@ export class Validate {
 		});
 		const { error, value } = schema.validate({ "str": val });
 		if (error) {
-			throw new VerifyException('查询参数错误', 302);
+			throw new VerifyException(StaticStr.ERR_MSG_VERIFY_DEFAULT,  StaticStr.ERR_CODE_DEFAULT);
 		}
 	}
 
@@ -76,7 +77,7 @@ export class Validate {
 		});
 		const { error, value } = schema.validate({ "str": val });
 		if (error) {
-			throw new VerifyException('查询参数错误', 302);
+			throw new VerifyException(StaticStr.ERR_MSG_VERIFY_DEFAULT,  StaticStr.ERR_CODE_DEFAULT);
 		}
 	}
 
@@ -93,7 +94,7 @@ export class Validate {
 		});
 		const { error, value } = schema.validate({ "str1": name, "str2": pwd });
 		if (error) {
-			throw new VerifyException('参数验证未成功', 302);
+			throw new VerifyException('参数验证未成功',  StaticStr.ERR_CODE_DEFAULT);
 		}
 	}
 }

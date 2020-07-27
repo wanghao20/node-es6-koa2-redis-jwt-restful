@@ -5,7 +5,7 @@ import { Context } from 'koa';
 import { JWT_SECRET } from '../config/Constants';
 import { BaseConfig } from '../config/Base';
 
-import { logError } from './logger';
+import { logError } from './Logger';
 import { errorMsg, successData } from './returnResult';
 /**
  * Created by wh on 2020/7/15

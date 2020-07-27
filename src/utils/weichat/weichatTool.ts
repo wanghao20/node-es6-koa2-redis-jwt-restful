@@ -1,5 +1,6 @@
-import { redisDb1 } from '../redisTool';
+import { redisDb1 } from '../RedisTool';
 import { KeyName } from '../../config/RedisKeys';
+import { DateFormat } from '../DateFormat';
 
 /**
  * Created by wh on 2020/7/24
@@ -119,5 +120,12 @@ export class WeChatTool {
 
 	public createTimeStamp() {
 		return new Date().getTime() / 1000;
+	}
+	/**
+	 * 时间戳产生函数
+	 */
+
+	public createOrderno() {
+		return DateFormat.dateFormat(new Date().getTime(),'%Y%m%d') +Math.random().toString().substr(2, 10);
 	}
 }
