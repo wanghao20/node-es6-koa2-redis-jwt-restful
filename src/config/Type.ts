@@ -1,4 +1,4 @@
-import { Context, Next } from 'koa';
+import { Context, Next } from "koa";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -121,7 +121,9 @@ type AgentOptionsTy = {
 	 */
 	pfx: Buffer;
 	/**
-	 * 企业转账商户号id(涉及支付)
+	 * 企业转账商户号id
+         * 此处设置为证书密码
+         * 服务器加载证书时需要使用密码否则会提示:mac verify failure
 	 */
 	passphrase: string;
 };

@@ -1,14 +1,15 @@
 // app.ts
-import cors = require('@koa/cors');
-import Router = require('@koa/router');
-import Koa = require('koa');
-import bodyParser = require('koa-bodyparser');
-import 'reflect-metadata';
-import { BaseConfig } from './config/Base';
-import { addRouter } from './routes/Routes';
-import { InitRedisData } from './utils/InitRedisData';
-import { logError, logHttp } from './utils/Logger';
-import { Filter } from './utils/Reqfilter';
+import cors = require("@koa/cors");
+import Router = require("@koa/router");
+import Koa = require("koa");
+import bodyParser = require("koa-bodyparser");
+import xmlParser = require("koa-xml-body");
+import "reflect-metadata";
+import { BaseConfig } from "./config/Base";
+import { addRouter } from "./routes/Routes";
+import { InitRedisData } from "./utils/InitRedisData";
+import { logError, logHttp } from "./utils/Logger";
+import { Filter } from "./utils/Reqfilter";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -30,7 +31,7 @@ export class App {
 		this.init().catch((error) => {
 			// tslint:disable-next-line:no-console
 			console.log(error);
-			logError('TypeORM init error:' + error);
+			logError("TypeORM init error:" + error);
 		});
 	}
 
@@ -38,6 +39,22 @@ export class App {
 	 * 装配各种中间件
 	 */
 	private async init() {
+		// 解决微信支付通知回调数据
+		this.app.use(
+			xmlParser({
+				"limit": 128, // 最大值默认1mb
+				"encoding": "utf8", // lib将从`content-type`中检测到它
+				"xmlOptions": {
+					"normalize": true, // 在文本节点内修剪空格
+					"normalizeTags": true, // 将标签转换为小写
+					"explicitArray": false, // 如果> 1，则仅将节点放入数组
+				},
+				// "key": "xmlBody", // lib将检查ctx.request.xmlBody并将解析的数据设置为它。
+				"onerror": (err, ctx) => {
+					logError("xmlParser 解析 error:" + err);
+				},
+			})
+		);
 		// 解析json格式
 		this.app.use(bodyParser());
 		// http请求记录
@@ -46,7 +63,6 @@ export class App {
 		this.app.use(Filter.reqfilter());
 		// koa
 		this.app.use(cors());
-
 		// add route
 		addRouter(this.router);
 		this.app.use(this.router.routes()).use(this.router.allowedMethods());
@@ -59,13 +75,11 @@ export class App {
 		// 运行服务器
 		// 设置监听端口
 		this.app.listen(BaseConfig.PORT, () => {
-			// tslint:disable-next-line:no-console
-			console.log('服务器开启 127.0.0.1:' + BaseConfig.PORT);
-			// tslint:disable-next-line:only-arrow-functions
+			console.log("服务器启动成功:" + BaseConfig.PORT);
+			// 使用定时器初始化数据(redis链接成功再初始化数据)
 			const t1 = setTimeout(function () {
 				// 初始化数据
-				// tslint:disable-next-line:no-unused-expression
-				new InitRedisData();
+				// new InitRedisData();
 				clearTimeout(t1); // 去掉定时器
 			}, 1000);
 			// 初始化Redis数据

@@ -1,10 +1,10 @@
-import { GlobalVar } from '../config/GlobalVar';
-import { KeyName } from '../config/RedisKeys';
-import { RedEnvelopeVal } from '../config/ReturnFormat';
-import { DateFormat } from '../utils/DateFormat';
-import { VerifyException } from '../utils/Exceptions';
-import { redisDb1 } from '../utils/RedisTool';
-import { StaticStr } from '../config/StaticStr';
+import { GlobalVar } from "../config/GlobalVar";
+import { KeyName } from "../config/RedisKeys";
+import { RedEnvelopeVal } from "../config/ReturnFormat";
+import { DateFormat } from "../utils/DateFormat";
+import { VerifyException } from "../utils/Exceptions";
+import { redisDb1 } from "../utils/RedisTool";
+import { StaticStr } from "../config/StaticStr";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -39,7 +39,7 @@ export class RedRewardService {
 			// 生成时间加上配置的倒计时
 			generateDate.setMinutes(generateDate.getMinutes() + GlobalVar.ID101);
 			// 判断生成时间和当前时间的时间差
-			const hoursCount = DateFormat.dateCount(generateDate, date, 'hours');
+			const hoursCount = DateFormat.dateCount(generateDate, date, "hours");
 			// 判断是否过期
 			if (hoursCount > GlobalVar.ID101) {
 				// 过期 删除该红包
@@ -48,7 +48,7 @@ export class RedRewardService {
 				redEnvelopeVal.isExpired = 1;
 				// 在一小时以内判断倒计时是否结束
 			} else if (hoursCount < 1) {
-				if (GlobalVar.ID101 > DateFormat.dateCount(generateDate, date, 'minutes')) {
+				if (GlobalVar.ID101 > DateFormat.dateCount(generateDate, date, "minutes")) {
 					redEnvelopeVal.littleTime = DateFormat.dateCountFormat(generateDate, date);
 					redEnvelopeVal.isExpired = 0;
 				}
@@ -93,9 +93,9 @@ export class RedRewardService {
 				// 拿到当前时间
 				const date = new Date();
 				// 判断领取倒计时是否结束
-				const hoursCount = DateFormat.dateCount(new Date(v.generateDate), date, 'hours');
+				const hoursCount = DateFormat.dateCount(new Date(v.generateDate), date, "hours");
 				if (hoursCount < 1) {
-					obj = { "state": 'ip_43' };
+					obj = { "state": "ip_43" };
 
 					return;
 				}
@@ -103,19 +103,19 @@ export class RedRewardService {
 				if (hoursCount > GlobalVar.ID101) {
 					v.isDelete = 1;
 					// 过期 删除该红包
-					obj = { "state": 'ip_44' };
+					obj = { "state": "ip_44" };
 
 					return;
 				}
 				// 判断红包是否已经被领取
 				if (v.isRobbed === 1) {
-					obj = { "state": 'ip_45' };
+					obj = { "state": "ip_45" };
 
 					return;
 				}
 				// 今日领取次数是否达上限
 				if (v.isRobbed >= GlobalVar.ID103) {
-					obj = { "state": 'ip_45' };
+					obj = { "state": "ip_45" };
 
 					return;
 				}
@@ -145,7 +145,7 @@ export class RedRewardService {
 					roleGrade = v.grade;
 				}
 				// 根据金币价值确定角色
-				obj = { "state": '200', "yuanBao": yuanBao, "roleGrade": roleGrade };
+				obj = { "state": "200", "yuanBao": yuanBao, "roleGrade": roleGrade };
 			}
 		});
 

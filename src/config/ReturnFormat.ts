@@ -8,7 +8,7 @@ class RedEnvelopeVal {
 	/**
 	 * id
 	 */
-	public id = '';
+	public id = "";
 	/**
 	 * 是否是红包持有者
 	 */
@@ -33,7 +33,7 @@ class Expeditions {
 	/**
 	 * id
 	 */
-	public id = '';
+	public id = "";
 	/**
 	 * 等级
 	 */
@@ -53,7 +53,7 @@ class Expeditions {
 	/**
 	 * 读取时间
 	 */
-	public redDate = '';
+	public redDate = "";
 }
 /**
  * 盟友列表
@@ -62,7 +62,7 @@ class ArmyList {
 	/**
 	 * id
 	 */
-	public id = '';
+	public id = "";
 	/**
 	 * name
 	 */

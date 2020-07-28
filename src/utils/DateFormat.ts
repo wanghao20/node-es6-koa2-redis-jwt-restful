@@ -1,4 +1,4 @@
-import moment = require('moment');
+import moment = require("moment");
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -11,7 +11,7 @@ export class DateFormat {
 	 * @param format 格式化时间格式,默认'YYYY-MM-DD HH:mm:ss'
 	 */
 	public static dateFormat(date: number, format?: string) {
-		return moment(date).format(format || 'YYYY-MM-DD HH:mm:ss');
+		return moment(date).format(format || "YYYY-MM-DD HH:mm:ss");
 	}
 	/**
 	 * 计算时间差,包括计算，天，时，分，秒
@@ -36,13 +36,13 @@ export class DateFormat {
 		const seconds = Math.round(leave3 / 1000);
 		// 判断需要的返回类型
 		switch (returnType) {
-			case 'days':
+			case "days":
 				return days;
-			case 'hours':
+			case "hours":
 				return hours + days * 24;
-			case 'days':
+			case "days":
 				return minutes + (hours + days * 24) * 60;
-			case 'days':
+			case "days":
 				return seconds + (minutes + (hours + days * 24) * 60);
 			default:
 				break;
@@ -70,6 +70,6 @@ export class DateFormat {
 		const leave3 = leave2 % (60 * 1000); // 计算分钟数后剩余的毫秒数
                 const seconds = Math.round(leave3 / 1000);
 
-		return days + '天 ' + hours + '小时 ' + minutes + ' 分钟' + seconds + ' 秒';
+		return days + "天 " + hours + "小时 " + minutes + " 分钟" + seconds + " 秒";
 	}
 }

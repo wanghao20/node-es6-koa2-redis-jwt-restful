@@ -17,5 +17,5 @@ const symmetryKey = `9vApxLk5G3PAsJrM`;
 /**
  * iv
  */
-const iv = 'FnJL7EDzjqWjcaY9';
+const iv = "FnJL7EDzjqWjcaY9";
 export { serverPubKey, clientPrivKey, symmetryKey, iv };

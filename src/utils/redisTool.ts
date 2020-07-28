@@ -1,6 +1,6 @@
-import * as ioredis from 'ioredis';
+import * as ioredis from "ioredis";
 
-import { BaseConfig } from '../config/Base';
+import { BaseConfig } from "../config/Base";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -68,11 +68,11 @@ interface RedisConfig {
  */
 const clientCreate = (config: RedisConfig, callback: any) => {
 	const redis: ioredis.Redis = new ioredis(config);
-	redis.on('connect', () => {
+	redis.on("connect", () => {
 		// 根据 connect 事件判断连接成功
 		callback(null, redis); // 链接成功， 返回 redis 连接对象
 	});
-	redis.on('error', (err: any) => {
+	redis.on("error", (err: any) => {
 		// 根据 error 事件判断连接失败
 		callback(err, null); // 捕捉异常， 返回 error
 	});
@@ -129,12 +129,12 @@ class RedisTool implements redisTool {
 			.then((res) => {
 				if (res) {
 					// tslint:disable-next-line:no-console
-					console.log('redis connet success');
+					console.log("redis connet success");
 				}
 			})
 			.catch((e) => {
 				// tslint:disable-next-line:no-console
-				console.error('The Redis Can not Connect:' + e);
+				console.error("The Redis Can not Connect:" + e);
 			});
 	}
 
@@ -164,7 +164,7 @@ class RedisTool implements redisTool {
 	 * @param value value
 	 */
 	public async setString(key: string, value: any) {
-		const val: string = typeof value !== 'string' ? JSON.stringify(value) : value;
+		const val: string = typeof value !== "string" ? JSON.stringify(value) : value;
 		try {
 			const res = await this.redis.set(key, val);
 
@@ -213,7 +213,7 @@ class RedisTool implements redisTool {
 	 * @param key key
 	 */
 	public async delString(key: string) {
-		const id: string = typeof key !== 'string' ? JSON.stringify(key) : key;
+		const id: string = typeof key !== "string" ? JSON.stringify(key) : key;
 		try {
 			const res = await this.redis.del(id);
 

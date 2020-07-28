@@ -1,9 +1,9 @@
-import { v4 as uuidv4 } from 'uuid';
-import { GlobalVar } from '../config/GlobalVar';
-import { KeyName } from '../config/RedisKeys';
-import { ArmyList, Expeditions } from '../config/ReturnFormat';
-import { AttackDate } from '../config/Type';
-import { redisDb1 } from '../utils/RedisTool';
+import { v4 as uuidv4 } from "uuid";
+import { GlobalVar } from "../config/GlobalVar";
+import { KeyName } from "../config/RedisKeys";
+import { ArmyList, Expeditions } from "../config/ReturnFormat";
+import { AttackDate } from "../config/Type";
+import { redisDb1 } from "../utils/RedisTool";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -128,10 +128,10 @@ export class SocialContactService {
 			"beHaveReadAttacker": 0,
 			"generateDate": new Date(),
 			"ingotReward": 10,
-			"takeAwayUserId": '',
+			"takeAwayUserId": "",
 		});
 		redisDb1.sadd(KeyName.SET_OBJ_RED_ENVRLOPE(uid), redEnvelope);
 
-		return { "state": '保存成功' };
+		return { "state": "保存成功" };
 	}
 }

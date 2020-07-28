@@ -1,10 +1,10 @@
-import { Context } from 'koa';
+import { Context } from "koa";
 
-import { get, post } from '../../decorator/httpMethod';
-import { Validate } from '../../utils/ReqValidate';
-import { successData } from '../../utils/returnResult';
-import { WeChatService } from '../../service/weichat/WeChat';
-import { EnAccountTransfer } from '../../config/Type';
+import { EnAccountTransfer } from "../../config/Type";
+import { Validate } from "../../utils/ReqValidate";
+import { successData } from "../../utils/returnResult";
+import { WeChatService } from "../../service/weichat/WeChat";
+import { get, post } from "../../utils/decorator/httpMethod";
 
 /**
  * Created by wh on 2020/7/23
@@ -25,7 +25,7 @@ export default class WeChatController {
 	 * 授权
 	 * @param ctx koa中间件
 	 */
-	@get('/oauth')
+	@get("/oauth")
 	public async oauth(ctx: Context) {
 		const state = await this.service.oauth(ctx);
 
@@ -36,7 +36,7 @@ export default class WeChatController {
 	 * 获取openid
 	 * @param ctx koa中间件
 	 */
-	@get('/token')
+	@get("/token")
 	public async token(ctx: Context) {
 		// Validate.isId(ctx.request.query.code);
 		const state = await this.service.token(ctx.request.query.code);
@@ -47,13 +47,13 @@ export default class WeChatController {
 	 * (企业转账)支付
 	 * @param ctx koa中间件
 	 */
-	@post('/transfers')
+	@post("/transfers")
 	public async transfers(ctx: Context) {
-		Validate.isId(ctx.request.body.appid);
 		Validate.isId(ctx.request.body.openid);
 		Validate.isNumber(ctx.request.body.amount);
 		const enAccountTransfer: EnAccountTransfer = ctx.request.body;
-		const data = await this.service.transfers(enAccountTransfer);
+                const data = "";
+                // await this.service.transfers(enAccountTransfer);
 
 		return (ctx.body = successData(data));
 	}

@@ -1,5 +1,5 @@
-import { ResData } from '../config/Type';
-import { StaticStr } from '../config/StaticStr';
+import { ResData } from "../config/Type";
+import { StaticStr } from "../config/StaticStr";
 
 /**
  * Created by wh on 2020/7/15
@@ -12,7 +12,7 @@ import { StaticStr } from '../config/StaticStr';
  * @param _data 返回数据体
  */
 const successData = (data?: any) => {
-	const obj: ResData = { "code": 200, "msg": '操作成功!', "data": data || '' };
+	const obj: ResData = { "code": 200, "msg": "操作成功!", "data": data || "" };
 
 	return obj;
 };
@@ -22,8 +22,8 @@ const successData = (data?: any) => {
  * @param _msg 返回的消息
  * @param _code code
  */
-const errorMsg = (msg?: string, code?: number) => {
-	const obj: ResData = { "code": code || StaticStr.ERR_CODE_DEFAULT, "msg": msg || '服务器错误!' };
+const errorMsg = (msg?: string, code?: any) => {
+	const obj: ResData = { "code": code || StaticStr.ERR_CODE_DEFAULT, "msg": msg || "服务器错误!" };
 
 	return obj;
 };

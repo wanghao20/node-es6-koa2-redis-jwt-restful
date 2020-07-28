@@ -1,11 +1,11 @@
 // const soap = require('soap');
-const request = require('request');
+const request = require("request");
 
 /**
  * Created by wh on 2020/7/23
  * author: wanghao
  * @desc：
- *
+ * http 请求封装类
  */
 export class HttpService {
 	/**
@@ -18,7 +18,7 @@ export class HttpService {
 		return new Promise(function (resolve, reject) {
 			const opts = {
 				"url": url,
-				"method": 'POST',
+				"method": "POST",
 				"body": formData,
 				"agentOptions": agentOptions,
 			};

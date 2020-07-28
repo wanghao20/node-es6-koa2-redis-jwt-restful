@@ -1,7 +1,7 @@
-import { KeyName } from '../config/RedisKeys';
-import { VerifyException } from '../utils/Exceptions';
-import { redisDb1 } from '../utils/RedisTool';
-import { StaticStr } from '../config/StaticStr';
+import { KeyName } from "../config/RedisKeys";
+import { VerifyException } from "../utils/Exceptions";
+import { redisDb1 } from "../utils/RedisTool";
+import { StaticStr } from "../config/StaticStr";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao

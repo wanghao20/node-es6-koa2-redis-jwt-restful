@@ -1,6 +1,8 @@
-import Joi = require('@hapi/joi');
-import { VerifyException } from './Exceptions';
-import { StaticStr } from '../config/StaticStr';
+import Joi = require("@hapi/joi");
+
+import { StaticStr } from "../config/StaticStr";
+
+import { VerifyException } from "./Exceptions";
 /**
  * Created by wh on 2020/7/18
  * author: wanghao
@@ -14,7 +16,7 @@ export class Validate {
 	 */
 	public static isId(val: string) {
 		const schema = Joi.object({
-			"str": Joi.string().min(1).max(30).required(),
+			"str": Joi.string().min(1).max(40).required(),
 		});
 		const { error, value } = schema.validate({ "str": val });
 		if (error) {
@@ -58,7 +60,7 @@ export class Validate {
 	public static isNumber(val: number) {
 		// 暂时判断是否为空
 		const schema = Joi.object({
-			"str": Joi.number().min(1).max(200).required(),
+			"str": Joi.required(),
 		});
 		const { error, value } = schema.validate({ "str": val });
 		if (error) {
@@ -94,7 +96,7 @@ export class Validate {
 		});
 		const { error, value } = schema.validate({ "str1": name, "str2": pwd });
 		if (error) {
-			throw new VerifyException('参数验证未成功',  StaticStr.ERR_CODE_DEFAULT);
+			throw new VerifyException("参数验证未成功",  StaticStr.ERR_CODE_DEFAULT);
 		}
 	}
 }

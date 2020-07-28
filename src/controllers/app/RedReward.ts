@@ -1,9 +1,9 @@
-import { Context } from 'koa';
+import { Context } from "koa";
 
-import { get, post } from '../../decorator/httpMethod';
-import { RedRewardService } from '../../service/RedReward';
-import { Validate } from '../../utils/ReqValidate';
-import { successData } from '../../utils/returnResult';
+import { RedRewardService } from "../../service/RedReward";
+import { Validate } from "../../utils/ReqValidate";
+import { successData } from "../../utils/returnResult";
+import { get, post } from "../../utils/decorator/httpMethod";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -23,7 +23,7 @@ export default class RedRewardController {
 	 * 通过userID查询红包
 	 * @param ctx koa中间件
 	 */
-	@get('/red_envelope')
+	@get("/red_envelope")
 	public async findRedRewardList(ctx: Context) {
 		Validate.isId(ctx.request.query.uid);
 		const redRewardList = await this.service.findRedRewardList(ctx.request.query.uid);
@@ -35,7 +35,7 @@ export default class RedRewardController {
 	 * 通过userID查询红包
 	 * @param ctx koa中间件
 	 */
-	@get('/red_envelope_record')
+	@get("/red_envelope_record")
 	public async findredEnvelopeRecordList(ctx: Context) {
 		Validate.isId(ctx.request.query.uid);
 		const redRewardList = await this.service.findredEnvelopeRecordList(ctx.request.query.uid);
@@ -47,7 +47,7 @@ export default class RedRewardController {
 	 * 领取红包
 	 * @param ctx koa中间件
 	 */
-	@post('/get_red_envelope')
+	@post("/get_red_envelope")
 	public async getRedEnvelope(ctx: Context) {
 		// Validate.isId(ctx.request.body.uid);
 		Validate.isId(ctx.request.body.rid);

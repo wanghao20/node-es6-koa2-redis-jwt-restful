@@ -1,4 +1,4 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao

@@ -1,9 +1,9 @@
-import { Context } from 'koa';
+import { Context } from "koa";
 
-import { get, put } from '../../decorator/httpMethod';
-import { SystemService } from '../../service/System';
-import { Validate } from '../../utils/ReqValidate';
-import { successData } from '../../utils/returnResult';
+import { SystemService } from "../../service/System";
+import { Validate } from "../../utils/ReqValidate";
+import { successData } from "../../utils/returnResult";
+import { get, put } from "../../utils/decorator/httpMethod";
 
 /**
  * Created by wh on 2020/7/15
@@ -24,7 +24,7 @@ export default class SystemController {
 	 * 查询系统设置
 	 * @param ctx koa中间件
 	 */
-	@get('/system_config')
+	@get("/system_config")
 	public async findConfig(ctx: Context) {
 		const systemConfig = await this.service.findConfig();
 
@@ -36,7 +36,7 @@ export default class SystemController {
 	 * 设置系统设置
 	 * @param ctx koa中间件
 	 */
-	@put('/system_config')
+	@put("/system_config")
 	public async setConfig(ctx: Context) {
 		Validate.isArray(ctx.request.body.fieldList);
 		const systemConfig = await this.service.SetConfig(ctx.request.body.fieldList);

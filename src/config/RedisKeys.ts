@@ -11,36 +11,36 @@ export class KeyName {
 	/**
 	 * 模拟账户
 	 */
-	public static HASH_AUTH_USER = 'HASH:AUTH:USER:';
+	public static HASH_AUTH_USER = "HASH:AUTH:USER:";
 	/**
 	 * 系统配置
 	 */
-	public static STR_CONFIG_SYSTETMF_INDKEY = 'STR:CONGIF:SYSTETMF_INDKEY';
+	public static STR_CONFIG_SYSTETMF_INDKEY = "STR:CONGIF:SYSTETMF_INDKEY";
 	/**
 	 * 等级奖励配置
 	 */
-	public static STR_CONFIG_GRAEDEVOTE = 'STR:CONGIF:GRAEDEVOTE:';
+	public static STR_CONFIG_GRAEDEVOTE = "STR:CONGIF:GRAEDEVOTE:";
 	/**
 	 * 2
 	 */
-	public static SET_CONFIG_GRAEDEVOTE = 'SET:CONGIF:GRAEDEVOTE';
+	public static SET_CONFIG_GRAEDEVOTE = "SET:CONGIF:GRAEDEVOTE";
 	/**
 	 * 已经领取红包列表
 	 */
-	public static STR_OBJ_RED_ENVRLOPE_RCORD = 'STR:OBJ:RED_ENVRLOPE_RCORD';
+	public static STR_OBJ_RED_ENVRLOPE_RCORD = "STR:OBJ:RED_ENVRLOPE_RCORD";
 	/**
 	 * set型数据
 	 */
 	/**
 	 * 玩家数据
 	 */
-	public static HASH_OBJ_GAME_USERS = 'HASH:OBJ:GAME_USERS:';
+	public static HASH_OBJ_GAME_USERS = "HASH:OBJ:GAME_USERS:";
 
 	// 每日清空数据
 	/**
 	 * 每日领取红包
 	 */
-	public static STR_DAYS_RED_CLAIMT_IMES = 'STR:DAYS:RED_CLAIMT_IMES:';
+	public static STR_DAYS_RED_CLAIMT_IMES = "STR:DAYS:RED_CLAIMT_IMES:";
 	// 实体对象
 	// 红包数据
 	/**

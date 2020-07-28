@@ -7,10 +7,10 @@ import { Entity, ObjectID, ObjectIdColumn, Column } from "typeorm";
 @Entity()
 export class User {
   @Column()
-  id: any;
+  public id: any;
   @Column()
-  password: any;
+  public password: any;
   @Column()
-  name: string;
+  public name: string;
 
 }

@@ -1,13 +1,13 @@
-import jwt = require('jsonwebtoken');
+import jwt = require("jsonwebtoken");
 
-import { Context } from 'koa';
+import { Context } from "koa";
 
-import { JWT_SECRET } from '../../config/Constants';
-import { TokenConfig } from '../../config/Type';
-import { post } from '../../decorator/httpMethod';
-import { AccountService } from '../../service/Auth';
-import { Validate } from '../../utils/ReqValidate';
-import { successData } from '../../utils/returnResult';
+import { JWT_SECRET } from "../../config/Constants";
+import { TokenConfig } from "../../config/Type";
+import { AccountService } from "../../service/Auth";
+import { Validate } from "../../utils/ReqValidate";
+import { successData } from "../../utils/returnResult";
+import { post } from "../../utils/decorator/httpMethod";
 
 /**
  * Created by wh on 2020/7/15
@@ -28,7 +28,7 @@ export default class AuthController {
 	 * 登录接口Controller
 	 * @param ctx koa中间件
 	 */
-	@post('/login')
+	@post("/login")
 	public async login (ctx: Context) {
 		// 验证
 		Validate.user(ctx.request.body.username, ctx.request.body.password);
@@ -47,7 +47,7 @@ export default class AuthController {
 	 * 注册接口Controller
 	 * @param ctx koa中间件
 	 */
-	@post('/register')
+	@post("/register")
 	public async register (ctx: Context) {
 		Validate.user(ctx.request.body.username, ctx.request.body.password);
 		const user = await this.service.insert(ctx.request.body.username, ctx.request.body.password);

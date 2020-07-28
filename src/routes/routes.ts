@@ -1,11 +1,11 @@
-import Router = require('@koa/router');
-import fs = require('fs');
-import path = require('path');
-import { resolve } from 'path';
-import 'reflect-metadata';
-import { ROUTER_MAP } from '../config/Constants';
-import { RouteMeta } from '../config/Type';
-const ctrPath = resolve(__dirname, '../controllers');
+import Router = require("@koa/router");
+import fs = require("fs");
+import path = require("path");
+import { resolve } from "path";
+import "reflect-metadata";
+import { ROUTER_MAP } from "../config/Constants";
+import { RouteMeta } from "../config/Type";
+const ctrPath = resolve(__dirname, "../controllers");
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -30,12 +30,12 @@ const addRouter = (router: any) => {
 	 */
 	// tslint:disable-next-line:completed-docs
 	function binding(m: ObjectConstructor, derName: string) {
-		const routerMap: RouteMeta[] = Reflect.getMetadata(ROUTER_MAP, m, 'method') || [];
+		const routerMap: RouteMeta[] = Reflect.getMetadata(ROUTER_MAP, m, "method") || [];
 		if (routerMap.length) {
 			const ctr: any = new m();
 			routerMap.forEach((route) => {
 				// const { name, method, path } = route;
-				const path: string = '/' + derName + route.path;
+				const path: string = "/" + derName + route.path;
 				const name: string = route.name;
 				const method: string = route.method;
 				const obj: string = ctr[name].bind(ctr);
