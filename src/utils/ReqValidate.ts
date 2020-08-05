@@ -3,6 +3,7 @@ import Joi = require("@hapi/joi");
 import { StaticStr } from "../config/StaticStr";
 
 import { VerifyException } from "./Exceptions";
+import { isUndefined } from "util";
 /**
  * Created by wh on 2020/7/18
  * author: wanghao
@@ -68,14 +69,17 @@ export class Validate {
 		}
 	}
 
-	/**
-	 * 判断数据是否有效
+        /**
+	 * 灵活判断字符类型?参数
 	 * @param val any
 	 */
-	public static isValid(val: number) {
-		// 暂时判断是否为空
+	public static isFlexValid(val: string) {
+                // 判断对象是否存在如果存在判断数据大小
+                if(isUndefined(val)||val===""){
+                        return true;
+                }
 		const schema = Joi.object({
-			"str": Joi.required(),
+			"str": Joi.string().min(0).max(20).required(),
 		});
 		const { error, value } = schema.validate({ "str": val });
 		if (error) {

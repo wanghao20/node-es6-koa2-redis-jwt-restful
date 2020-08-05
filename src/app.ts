@@ -1,15 +1,29 @@
 // app.ts
 import cors = require("@koa/cors");
+
 import Router = require("@koa/router");
+
 import Koa = require("koa");
+
 import bodyParser = require("koa-bodyparser");
+
 import xmlParser = require("koa-xml-body");
+
+import { CronJob } from "cron";
+
 import "reflect-metadata";
+
+import { createConnection } from "typeorm";
+
 import { BaseConfig } from "./config/Base";
+import { mysqlConfig } from "./config/Environments";
+import { DbLogger } from "./dataBase/Database";
 import { addRouter } from "./routes/Routes";
 import { InitRedisData } from "./utils/InitRedisData";
 import { logError, logHttp } from "./utils/Logger";
+import { redisDb1 } from "./utils/RedisTool";
 import { Filter } from "./utils/Reqfilter";
+import { TimedTask } from "./utils/TimedTask";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -22,17 +36,44 @@ export class App {
 	 */
 	private readonly app: Koa;
 	/**
+	 * 过滤器
+	 */
+	private readonly filter: Filter;
+	/**
 	 * Router对象
 	 */
 	private readonly router: Router;
+	/**
+	 * 定时任务对象
+	 */
+	private readonly timedTask: TimedTask;
 	constructor() {
 		this.app = new Koa();
 		this.router = new Router();
+		this.filter = new Filter();
+		this.timedTask = new TimedTask();
 		this.init().catch((error) => {
 			// tslint:disable-next-line:no-console
 			console.log(error);
 			logError("TypeORM init error:" + error);
 		});
+		// 启动定时任务
+		// this.startTimedTask();
+	}
+	/**
+	 * 启动定时任务
+	 */
+	public startTimedTask() {
+		// # 每天的凌晨 0点0分0秒触发  （每天触发一次）
+		// const task = new CronJob("00 00 00 * * *",async ()=> {
+		const task = new CronJob("* * * * * *", async () => {
+			// 过滤非活跃用户
+			await this.timedTask.redisDataLanding();
+
+			console.log("定时任务处理完成");
+		});
+		console.log("定时任务初始化完成");
+		task.start();
 	}
 
 	/**
@@ -60,7 +101,7 @@ export class App {
 		// http请求记录
 		this.app.use(logHttp());
 		// 接收到数据过滤无效请求
-		this.app.use(Filter.reqfilter());
+		this.app.use(this.filter.reqfilter());
 		// koa
 		this.app.use(cors());
 		// add route
@@ -72,40 +113,23 @@ export class App {
 	 * 服务器启动方法
 	 */
 	public start() {
-		// 运行服务器
-		// 设置监听端口
-		this.app.listen(BaseConfig.PORT, () => {
-			console.log("服务器启动成功:" + BaseConfig.PORT);
-			// 使用定时器初始化数据(redis链接成功再初始化数据)
-			const t1 = setTimeout(function () {
-				// 初始化数据
-				// new InitRedisData();
-				clearTimeout(t1); // 去掉定时器
-			}, 1000);
-			// 初始化Redis数据
-			// tslint:disable-next-line:no-unused-expression
-			// new InitRedisData();
-		});
-		// // 创建数据库连接
-		// const config: ConnectionOptions = mongodbConfig as any;
-		// createConnection(config)
-		//     .then(() => {
-		//         // 运行服务器
-		//         // 设置监听端口
-		//         this.app.listen(BaseConfig.PORT, () => {
-		//             // tslint:disable-next-line:no-console
-		//             console.log("服务器开启 127.0.0.1:" + BaseConfig.PORT);
-		//             // 初始化Redis数据
-		//             // tslint:disable-next-line:no-unused-expression
-		//             new InitRedisData();
-		//         });
-
-		//     })
-		//     .catch((error) => {
-		//         // tslint:disable-next-line:no-console
-		//         console.log('TypeORM connection error:' + error)
-		//         logError('TypeORM connection error:' + error)
-		//     }
-		//     );
+		// 接管数据库logger
+		Object.assign(mysqlConfig, { "logger": new DbLogger() });
+		// 创建数据库连接
+		createConnection(mysqlConfig)
+			.then(async (connection) => {
+				console.log("数据库连接成功!");
+				// 设置监听端口
+				this.app.listen(BaseConfig.PORT, () => {
+					console.log("服务器开启成功!" + BaseConfig.PORT);
+					// 初始化Redis数据
+					new InitRedisData();
+					this.timedTask.redisDataLanding();
+				});
+			})
+			.catch((err) => {
+				console.log("TypeORM connection error:" + err);
+				logError("TypeORM connection error:" + err);
+			});
 	}
 }

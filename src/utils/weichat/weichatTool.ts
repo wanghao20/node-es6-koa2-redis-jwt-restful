@@ -1,6 +1,8 @@
+import { DateFormat } from "../DateFormat";
 import { redisDb1 } from "../RedisTool";
 import { KeyName } from "../../config/RedisKeys";
-import { DateFormat } from "../DateFormat";
+import { WeiChatBaseConfig } from "../../config/weichat/Config";
+import { WeiChatUrlBaseConfig } from "../../config/weichat/UrlBase";
 
 /**
  * Created by wh on 2020/7/24
@@ -9,6 +11,15 @@ import { DateFormat } from "../DateFormat";
  */
 export class WeChatTool {
 	/**
+	 * 微信授权操作对象
+	 */
+	public client: any;
+	constructor() {
+		// tslint:disable-next-line:variable-name
+		const OAuth = require("wechat-oauth");
+		this.client = new OAuth(WeiChatBaseConfig.appID, WeiChatBaseConfig.appSecret);
+	}
+	/**
 	 * 获取实例的配置信息
 	 * @param appid appid
 	 */
@@ -16,6 +27,17 @@ export class WeChatTool {
 		const appinfo = await this.getAppInfoSetting(appid);
 
 		return appinfo;
+	}
+	/**
+	 * 生成引导用户点击的URL。
+	 */
+	public async getAuthorizeURL() {
+		// 手机页面
+		// const url = this.client.getAuthorizeURL(WeiChatUrlBaseConfig.returnUri, "state", StaticStr.SNSAPI);
+		// 电脑页面
+		const url = this.client.getAuthorizeURLForWebsite(WeiChatUrlBaseConfig.returnUri);
+
+		return url;
 	}
 	/**
 	 *  根据不同的AppCode获取对应的Id和Key
@@ -57,9 +79,9 @@ export class WeChatTool {
 		return reNodeValue;
 	}
 	/**
-         * object-->string
-         * @param args 参数
-         */
+	 * object-->string
+	 * @param args 参数
+	 */
 	public object2raw(args: { [x: string]: any }) {
 		let keys = Object.keys(args);
 		keys = keys.sort();
@@ -71,7 +93,7 @@ export class WeChatTool {
 		for (const k in newArgs) {
 			string += "&" + k + "=" + newArgs[k];
 		}
-                string = string.substr(1);
+		string = string.substr(1);
 
 		return string;
 	}
@@ -84,7 +106,7 @@ export class WeChatTool {
 		let string = this.object2raw(data);
 		string = string + "&key=" + merchantKey;
 		const crypto = require("crypto");
-                const sign = crypto.createHash("md5").update(string, "utf8").digest("hex");
+		const sign = crypto.createHash("md5").update(string, "utf8").digest("hex");
 
 		return sign.toUpperCase();
 	}
@@ -104,7 +126,7 @@ export class WeChatTool {
 		const paySign = this.sign(array, apikey);
 		xmlData += "<sign>" + paySign + "</sign>";
 		xmlData += "</xml>";
-                // console.log('xml data ===', _xmlData);
+		// console.log('xml data ===', _xmlData);
 
 		return xmlData;
 	}
@@ -121,13 +143,13 @@ export class WeChatTool {
 		return new Date().getTime() / 1000;
 	}
 
-        /**
-         * 生成商家订单号
-         * 这里默认使用年月日+10位随机数生成
-         * 实际开发中可从数据库中查询最大值
-         * 使用数值叠加方法确定唯一性
-         */
+	/**
+	 * 生成商家订单号
+	 * 这里默认使用年月日+10位随机数生成
+	 * 实际开发中可从数据库中查询最大值
+	 * 使用数值叠加方法确定唯一性
+	 */
 	public createOrderno() {
-		return DateFormat.dateFormat(new Date().getTime(),"YYYYMMDD") +Math.random().toString().substr(2, 10);
+		return DateFormat.dateFormat(new Date().getTime(), "YYYYMMDD") + Math.random().toString().substr(2, 10);
 	}
 }

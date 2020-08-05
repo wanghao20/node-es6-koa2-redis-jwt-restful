@@ -2,8 +2,8 @@ import { Context } from "koa";
 
 import { SocialContactService } from "../../service/SocialContact";
 import { Validate } from "../../utils/ReqValidate";
-import { successData } from "../../utils/returnResult";
-import { get, post } from "../../utils/decorator/httpMethod";
+import { ReturnResult } from "../../utils/ReturnResult";
+import { get, put } from "../../utils/decorator/httpMethod";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -28,7 +28,7 @@ export default class SocialContactController {
 		Validate.isId(ctx.request.query.uid);
 		const armyList = await this.service.armyList(ctx.request.query.uid);
 
-		return (ctx.body = successData(armyList));
+		return (ctx.body = ReturnResult.successData(armyList));
 	}
 
 	/**
@@ -40,19 +40,19 @@ export default class SocialContactController {
 		Validate.isId(ctx.request.query.uid);
 		const expeditionsList = await this.service.expeditionsList(ctx.request.query.uid);
 
-		return (ctx.body = successData(expeditionsList));
+		return (ctx.body = ReturnResult.successData(expeditionsList));
 	}
 
 	/**
 	 * 攻打
 	 * @param ctx koa
 	 */
-	@post("/attack")
+	@put("/attack")
 	public async attack(ctx: Context) {
 		Validate.isId(ctx.request.body.uid);
 		Validate.isObj(ctx.request.body.beuser);
 		const obj = await this.service.attack(ctx.request.body.uid, ctx.request.body.beuser);
 
-		return (ctx.body = successData(obj));
+		return (ctx.body = ReturnResult.successData(obj));
 	}
 }

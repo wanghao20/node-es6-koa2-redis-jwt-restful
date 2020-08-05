@@ -37,7 +37,7 @@ export default class Encryption {
 	 * @param {*} data 待解密数据
 	 * @returns utf8
 	 */
-	public static async privateDecrypt(data: string) {
+	public  async privateDecrypt(data: string) {
 		// 解密数据类型
 		const privateKey = new NodeRSA(Keys.clientPrivKey);
 		// padding 填充方式
@@ -54,7 +54,7 @@ export default class Encryption {
 	 * @param {*} data 待加密数据
 	 * @returns base64
 	 */
-	public static publicEncrypt(data: string) {
+	public  publicEncrypt(data: string) {
 		const pubKey = new NodeRSA(Keys.serverPubKey);
 		pubKey.setOptions({ "encryptionScheme": "pkcs1" });
 		const encrypted = pubKey.encrypt(data, "base64");
@@ -68,7 +68,7 @@ export default class Encryption {
 	 * @param data 加密数据体
 	 * @return base64
 	 */
-	public static aesEncrypt(data: string, key: string) {
+	public  aesEncrypt(data: string, key: string) {
 		const cipherChunks = [];
 		const cipher = crypto.createCipheriv("aes-128-ECB", key, "");
 		cipher.setAutoPadding(true);
@@ -83,7 +83,7 @@ export default class Encryption {
 	 * @param encrypt 解密数据体
 	 * @return utf8
 	 */
-	public static async aesDecrypt(encrypt: string, key: any) {
+	public  async aesDecrypt(encrypt: string, key: any) {
 		const cipherChunks = [];
 		const decipher = crypto.createDecipheriv("aes-128-ECB", key, "");
 		decipher.setAutoPadding(true);

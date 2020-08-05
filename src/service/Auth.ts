@@ -17,14 +17,15 @@ export class AccountService {
 	 * @param passWord 密码
 	 */
 	public async verifyPassword(userName: string, passWord: any) {
-		const name = await redisDb1.hget(KeyName.HASH_AUTH_USER + userName, "name");
-		const pwd = await redisDb1.hget(KeyName.HASH_AUTH_USER + userName, "passWord");
-		const uid = await redisDb1.hget(KeyName.HASH_AUTH_USER + userName, "id");
+		//
+		const name = await redisDb1.hget(KeyName.HASH_OBJ_GAME_USERS + userName, "name");
+		const pwd = await redisDb1.hget(KeyName.HASH_OBJ_GAME_USERS + userName, "passWord");
+		const uid = await redisDb1.hget(KeyName.HASH_OBJ_GAME_USERS + userName, "id");
 		if (name !== userName) {
 			throw new VerifyException(StaticStr.USERNAME_ERR_MSG, StaticStr.ERR_CODE_DEFAULT);
 		}
 		if (!(await argon2.verify(pwd, passWord))) {
-			throw new VerifyException(StaticStr.USERNAME_ERR_MSG,  StaticStr.ERR_CODE_DEFAULT);
+			throw new VerifyException(StaticStr.USERNAME_ERR_MSG, StaticStr.ERR_CODE_DEFAULT);
 		}
 
 		return { "id": uid, "name": userName };
@@ -36,17 +37,12 @@ export class AccountService {
 	 * @param passWord 密码
 	 */
 	public async insert(userName: string, passWord: string) {
-		const name = await redisDb1.hget(KeyName.HASH_AUTH_USER + userName, "name");
-		if (name === userName) {
-			throw new VerifyException(StaticStr.INSERT_ERR_MSG,  StaticStr.ERR_CODE_DEFAULT);
-		} else {
-			const uid = uuidv4();
-			// 保存到数据库
-			redisDb1.hset(KeyName.HASH_AUTH_USER + userName, "id", uid);
-			redisDb1.hset(KeyName.HASH_AUTH_USER + userName, "name", userName);
-			redisDb1.hset(KeyName.HASH_AUTH_USER + userName, "passWord", await argon2.hash(passWord));
+		const uid = uuidv4();
+		// 保存到数据库
+		redisDb1.hset(KeyName.HASH_OBJ_GAME_USERS + uid, "id", uid);
+		redisDb1.hset(KeyName.HASH_OBJ_GAME_USERS + uid, "name", userName);
+		redisDb1.hset(KeyName.HASH_OBJ_GAME_USERS + uid, "passWord", await argon2.hash(passWord));
 
-			return { "id": uid, "name": userName };
-		}
+		return { "id": uid, "name": userName };
 	}
 }

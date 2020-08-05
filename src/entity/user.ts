@@ -1,4 +1,4 @@
-import { Entity, ObjectID, ObjectIdColumn, Column } from "typeorm";
+import { Entity, ObjectID, ObjectIdColumn, Column, PrimaryColumn } from "typeorm";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -6,11 +6,19 @@ import { Entity, ObjectID, ObjectIdColumn, Column } from "typeorm";
  */
 @Entity()
 export class User {
-  @Column()
-  public id: any;
-  @Column()
-  public password: any;
-  @Column()
-  public name: string;
-
+	/**
+	 * id
+	 */
+	@PrimaryColumn()
+        public id: string;
+        /**
+         * name
+         */
+	@Column()
+        public name: string;
+        /**
+         * 密码
+         */
+	@Column()
+        public passWord: string;
 }

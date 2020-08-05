@@ -4,9 +4,10 @@ import fs = require("fs");
 
 import { GlobalVar } from "../config/GlobalVar";
 import { KeyName } from "../config/RedisKeys";
+import { DrawReward, TbLogContent, TbLog } from "../config/Type";
+// import { DrawRewardEntity } from "../entity/DrawRewardEntity";
 
-import { DrawReward } from "../config/Type";
-import { DrawRewardEntity } from "../entity/DrawRewardEntity";
+import { DateFormat } from "./DateFormat";
 import { logError } from "./Logger";
 import { redisDb1 } from "./RedisTool";
 /**
@@ -156,15 +157,24 @@ export class InitRedisData {
 			redisDb1.sadd(KeyName.SET_CONFIG_GRAEDEVOTE, "leve10:" + config.leve10);
 		});
 		// 玩家领取记录
-                const drawLogList = [];
-                const drawLog :DrawReward=new DrawRewardEntity();
-                drawLog.uid="1";
-                drawLog.grade=2;
-                drawLog.devote=20;
-		drawLogList.push(drawLog);
-		drawLogList.forEach((v) => {
-			redisDb1.sadd(KeyName.SET_OBJ_DRAW_LOG_ID(v.uid), JSON.stringify(v));
-		});
+		const drawLogList = [];
+		// const drawLog: DrawReward = new DrawRewardEntity();
+		// drawLog.uid = "1";
+		// drawLog.grade = 2;
+		// drawLog.devote = 20;
+		// drawLogList.push(drawLog);
+		// drawLogList.forEach((v) => {
+		// 	redisDb1.sadd(KeyName.SET_OBJ_DRAW_LOG_ID(v.uid), JSON.stringify(v));
+		// });
+
+		// redisDb1.sadd(KeyName.SET_OBJ_TB_LOG, JSON.stringify(tbLog));
+		// 操作记录对应详情数据
+                const tbLogContent: TbLogContent = { "urlAddress": "/app/addUser", "comment": "红包" };
+                const tbLogContent1: TbLogContent = { "urlAddress": "/app/system_config", "comment": "系统配置" };
+                // const tbLogContent2: TbLogContent = { "urlAddress": "/app/tbLog", "comment": "用户日志" };
+                redisDb1.hset(KeyName.HASH_OBJ_CONTENT_URL, tbLogContent.urlAddress, tbLogContent.comment);
+                redisDb1.hset(KeyName.HASH_OBJ_CONTENT_URL, tbLogContent1.urlAddress, tbLogContent1.comment);
+
 	}
 
 	/**

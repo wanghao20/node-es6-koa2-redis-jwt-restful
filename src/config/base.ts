@@ -22,7 +22,26 @@ export class BaseConfig {
 	 */
 	public static REDIS_PASSWORD = "";
 	/**
-	 * token验证白名单Url
+	 * redis db配置(项目使用)
 	 */
-	public static OPEN_URL = ["/auth/login", "/auth/register","/wechat/oauth"];
+	public static SYSTEM_DB = 1;
+	/**
+	 * redis db配置(MQ使用)
+	 */
+	public static BULLMQ_DB = 2;
+	/**
+         * token验证白名单Url
+	 */
+        public static OPEN_URL = ["/auth/login", "/auth/register", "/wechat/oauth", "/favicon.ico"];
+	/**
+         * 不记录日志Url
+	 */
+        public static NO_LOG_URL = ["/app/system/tbLog", "/app/system/cltLog"];
+
+        /**
+         * 设置非活跃玩家判定时间(天数)
+         * 玩家超过天数内未登录后清理redis内存数据
+         */
+        public static DT_TIME = 4;
+
 }

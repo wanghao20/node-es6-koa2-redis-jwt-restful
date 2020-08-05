@@ -57,7 +57,7 @@ export class DateFormat {
 	 * false: {'days':days,'hours':hours,'minutes':minutes,'seconds':seconds}
 	 */
 	public static dateCountFormat(date1: Date, date2: Date) {
-		const date3 = date2.getTime() - date1.getTime(); // 时间差的毫秒数
+                const date3 = date2.getTime() - date1.getTime(); // 时间差的毫秒数
 		// 计算出相差天数
 		const days = Math.floor(date3 / (24 * 3600 * 1000));
 		// 计算出小时数
@@ -71,5 +71,16 @@ export class DateFormat {
                 const seconds = Math.round(leave3 / 1000);
 
 		return days + "天 " + hours + "小时 " + minutes + " 分钟" + seconds + " 秒";
-	}
+        }
+        /**
+         *   拿取当前日期前某一天日期
+         * @param days 天数
+         */
+        public static today(days:number) {
+
+                const today = moment();
+
+                return today.subtract(days,"days").format("YYYY-MM-DD"); /*前一天的时间*/
+        }
+
 }

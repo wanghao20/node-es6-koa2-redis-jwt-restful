@@ -9,10 +9,6 @@
  */
 export class KeyName {
 	/**
-	 * 模拟账户
-	 */
-	public static HASH_AUTH_USER = "HASH:AUTH:USER:";
-	/**
 	 * 系统配置
 	 */
 	public static STR_CONFIG_SYSTETMF_INDKEY = "STR:CONGIF:SYSTETMF_INDKEY";
@@ -29,6 +25,17 @@ export class KeyName {
 	 */
 	public static STR_OBJ_RED_ENVRLOPE_RCORD = "STR:OBJ:RED_ENVRLOPE_RCORD";
 	/**
+	 * HyperLogLog型数据
+	 * 记录日活跃用户数
+	 */
+	public static HLL_USER_ACT = "HLL:USER:ACT:";
+
+	/**
+	 * bitmap型数据
+	 * 记录活跃用户
+	 */
+	public static BITM_USER_ACT = "BITM:USER:ACT:";
+	/**
 	 * set型数据
 	 */
 	/**
@@ -41,6 +48,14 @@ export class KeyName {
 	 * 每日领取红包
 	 */
 	public static STR_DAYS_RED_CLAIMT_IMES = "STR:DAYS:RED_CLAIMT_IMES:";
+	/**
+	 * 操作记录表
+	 */
+	public static SET_OBJ_TB_LOG = "SET:LOG:TB_LOG";
+	/**
+	 * 操作请求URL对应详情
+	 */
+	public static HASH_OBJ_CONTENT_URL = "HASH:OBJ:_CONTENT:";
 	// 实体对象
 	// 红包数据
 	/**
@@ -70,5 +85,12 @@ export class KeyName {
 	 */
 	public static HASH_OBJ_APPINFO(appid: string) {
 		return `HASH:OBJ:APPINFO:${appid}`;
+	}
+	/**
+	 * HyperLogLog型数据
+	 * 用户活跃数据记录,用来判断前两天用户活跃度
+	 */
+	public static HLL_USER_STATS(days: number) {
+		return `HLL:USER:STATS${days}:`;
 	}
 }

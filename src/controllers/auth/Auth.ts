@@ -6,7 +6,7 @@ import { JWT_SECRET } from "../../config/Constants";
 import { TokenConfig } from "../../config/Type";
 import { AccountService } from "../../service/Auth";
 import { Validate } from "../../utils/ReqValidate";
-import { successData } from "../../utils/returnResult";
+import { ReturnResult } from "../../utils/ReturnResult";
 import { post } from "../../utils/decorator/httpMethod";
 
 /**
@@ -40,7 +40,7 @@ export default class AuthController {
 		};
 		const token = jwt.sign(tconfig, JWT_SECRET);
 
-		return (ctx.body = successData({ "token": token, user }));
+		return (ctx.body = ReturnResult.successData({ "token": token, user }));
 	}
 
 	/**
@@ -58,6 +58,6 @@ export default class AuthController {
 		};
 		const token = jwt.sign(tconfig, JWT_SECRET);
 
-		return (ctx.body = successData({ "token": token, user }));
+		return (ctx.body = ReturnResult.successData({ "token": token, user }));
 	}
 }

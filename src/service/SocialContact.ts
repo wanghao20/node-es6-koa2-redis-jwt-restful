@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+
 import { GlobalVar } from "../config/GlobalVar";
 import { KeyName } from "../config/RedisKeys";
 import { ArmyList, Expeditions } from "../config/ReturnFormat";
@@ -17,14 +18,15 @@ export class SocialContactService {
 	public async armyList(uid: string) {
 		// 从Redis拿取数据
 		const allyList = [];
-		const user = JSON.parse(await redisDb1.smembers(KeyName.HASH_OBJ_GAME_USERS + uid).toString());
+		const friends = JSON.parse(redisDb1.hget(KeyName.HASH_OBJ_GAME_USERS + uid,"friends").toString());
+		const user = JSON.parse(redisDb1.hgetall(KeyName.HASH_OBJ_GAME_USERS + uid).toString());
 		allyList.push(user);
 		let i = 0;
 		let j = 0;
 		let k = 0;
-		user.friends.forEach(async (v: string) => {
+		friends.forEach(async (v: string) => {
 			// 拿到玩家一级好友
-			const user1 = JSON.parse(await redisDb1.smembers(KeyName.HASH_OBJ_GAME_USERS + v).toString());
+			const user1 = JSON.parse(redisDb1.hgetall(KeyName.HASH_OBJ_GAME_USERS + v).toString());
 			// 根据全局配置获取数量
 			if (user1.grade === 1 || i < GlobalVar.ID110[0]) {
 				i++;

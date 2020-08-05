@@ -6,8 +6,10 @@ import { BaseConfig } from "../config/Base";
 import { JWT_SECRET } from "../config/Constants";
 import { StaticStr } from "../config/StaticStr";
 
+import { BullMQ } from "./BullMQ";
 import { logError } from "./Logger";
-import { errorMsg, successData } from "./returnResult";
+import { ReturnResult } from "./ReturnResult";
+import { TbLog } from "../config/Type";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -15,10 +17,17 @@ import { errorMsg, successData } from "./returnResult";
  */
 export class Filter {
 	/**
+	 * 消息中间件
+	 */
+	public bull: BullMQ;
+	constructor() {
+		this.bull = new BullMQ();
+	}
+	/**
 	 * reqfilter
 	 * @desc：请求验证/过滤
 	 */
-	public static reqfilter() {
+	public reqfilter() {
 		return async (ctx: Context, next: () => Promise<void>) => {
 			// 跨域请求设置
 			ctx.res.setHeader("Access-Control-Allow-Origin", "*");
@@ -26,35 +35,31 @@ export class Filter {
 			ctx.res.setHeader("Access-Control-Allow-Headers", "Content-Type,Accept,Authentication");
 			ctx.res.setHeader("Content-Type", "application/json; charset=utf-8");
 			if (ctx.req.method === "OPTIONS") {
-				return (ctx.body = successData());
+				return (ctx.body = ReturnResult.successData());
 			}
-			// 判断Url是否不用验证token
-			let isOpenUrl = false;
-			BaseConfig.OPEN_URL.find(function (value) {
-				if (value === ctx.originalUrl) {
-					isOpenUrl = true;
-				}
-			});
 			try {
-				// 需要验证token
-				if (isOpenUrl) {
+                                let url = ctx.originalUrl.substring(0, ctx.originalUrl.indexOf("?"));
+                                if(url===""){url=ctx.originalUrl;}
+				if (BaseConfig.OPEN_URL.indexOf(url) !== -1) {
 					// 白名单接口直接通过
 					await next();
 				} else {
-					const decodedToken = verify(ctx.headers.authentication, JWT_SECRET);
-					// 解析token保存到中间间
-					ctx.user = decodedToken; // 这里的key = 'user'
+					const decodedToken:any  = verify(ctx.headers.authentication, JWT_SECRET);
+					// 解析token保存到中间
+					ctx.user = decodedToken.data; // 这里的key = 'user'
 					await next();
+					// 保存用户操作日志
+					this.operateLog(ctx);
 				}
 			} catch (error) {
-				Filter.catchError(ctx, error);
+				this.catchError(ctx, error);
 			}
 
 			// 判断404
 			if (ctx.status === 404) {
 				ctx.status = 404;
 
-				return (ctx.body = errorMsg("未找到当前路径", 404));
+				return (ctx.body = ReturnResult.errorMsg("未找到当前路径", 404));
 			}
 		};
 	}
@@ -64,24 +69,42 @@ export class Filter {
 	 * @param ctx koa
 	 * @param error 错误信息
 	 */
-	public static async catchError(ctx: Context, error: any) {
+	public async catchError(ctx: Context, error: any) {
 		// 判断是否是参数错误
 		if (error.msg) {
 			ctx.status = StaticStr.ERR_CODE_DEFAULT;
-			// logError(error.msg, ctx.ip);
 
-			return (ctx.body = errorMsg(error.msg, StaticStr.ERR_CODE_DEFAULT));
-		} else if (error.message === "invalid token" || error.message === "jwt must be provided") {
+			return (ctx.body = ReturnResult.errorMsg(error.msg, StaticStr.ERR_CODE_DEFAULT));
+		} else if (error.message === "invalid token" || error.message === "jwt must be provided" || error.message === "jwt expired") {
 			// token验证错误
 			ctx.status = 401;
 
-			return (ctx.body = errorMsg("当前token失效", 401));
+			return (ctx.body = ReturnResult.errorMsg("当前token失效", 401));
 		} else {
 			// 系统错误
 			logError(error.message, ctx.ip);
 			ctx.status = 500;
 
-			return (ctx.body = errorMsg("服务器错误", 500));
+			return (ctx.body = ReturnResult.errorMsg("服务器错误", 500));
 		}
+	}
+	/**
+	 * 用户操作记录
+	 * @param ctx koa
+	 */
+	public operateLog(ctx: Context) {
+		// 记录日志
+		// 过滤日志白名单
+		if (BaseConfig.NO_LOG_URL.indexOf(ctx.routerPath) === -1) {
+			// 添加到队列中处理
+			const tbLog: TbLog = {};
+			tbLog.userId = ctx.user.id;
+			tbLog.operationUrl = ctx.operationUrl;
+			tbLog.operationType = ctx.request.method;
+			this.bull.saveObj(tbLog, "tbLog");
+		}
+                // 记录用户活跃统计
+                // 暂时写在这里
+		this.bull.saveActive(ctx.user.id);
 	}
 }

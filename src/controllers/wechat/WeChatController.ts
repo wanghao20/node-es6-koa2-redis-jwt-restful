@@ -1,8 +1,8 @@
 import { Context } from "koa";
 
-import { EnAccountTransfer } from "../../config/Type";
+import { EnAccountTransfer, SenDredPack } from "../../config/Type";
 import { Validate } from "../../utils/ReqValidate";
-import { successData } from "../../utils/returnResult";
+import { ReturnResult } from "../../utils/ReturnResult";
 import { WeChatService } from "../../service/weichat/WeChat";
 import { get, post } from "../../utils/decorator/httpMethod";
 
@@ -15,7 +15,7 @@ export default class WeChatController {
 	/**
 	 * 逻辑处理service类
 	 */
-	private readonly service: WeChatService;
+        private readonly service: WeChatService;
 
 	constructor() {
 		this.service = new WeChatService();
@@ -29,7 +29,7 @@ export default class WeChatController {
 	public async oauth(ctx: Context) {
 		const state = await this.service.oauth(ctx);
 
-		return (ctx.body = successData(state));
+		return (ctx.body = ReturnResult.successData(state));
 	}
 
 	/**
@@ -41,7 +41,7 @@ export default class WeChatController {
 		// Validate.isId(ctx.request.query.code);
 		const state = await this.service.token(ctx.request.query.code);
 
-		return (ctx.body = successData(state));
+		return (ctx.body = ReturnResult.successData(state));
 	}
 	/**
 	 * (企业转账)支付
@@ -49,12 +49,24 @@ export default class WeChatController {
 	 */
 	@post("/transfers")
 	public async transfers(ctx: Context) {
-		Validate.isId(ctx.request.body.openid);
-		Validate.isNumber(ctx.request.body.amount);
+		// Validate.isId(ctx.request.body.openid);
+		// Validate.isNumber(ctx.request.body.amount);
 		const enAccountTransfer: EnAccountTransfer = ctx.request.body;
-                const data = "";
-                // await this.service.transfers(enAccountTransfer);
+                const data =  await this.service.transfers(enAccountTransfer);
 
-		return (ctx.body = successData(data));
+                return (ctx.body = ReturnResult.successData(data));
+        }
+        /**
+	 * (企业红包)支付
+	 * @param ctx koa中间件
+	 */
+	@post("/sendredpack")
+	public async sendredpack(ctx: Context) {
+		// Validate.isId(ctx.request.body.openid);
+		// Validate.isNumber(ctx.request.body.amount);
+		const senDredPack: SenDredPack = ctx.request.body;
+                const data =  await this.service.sendredpack(senDredPack);
+
+                return (ctx.body = ReturnResult.successData(data));
 	}
 }

@@ -14,7 +14,7 @@ export class HttpService {
 	 * @param body
 	 * @returns {Observable<Response>}
 	 */
-	public static async tPost(url: string, formData: any, agentOptions: any) {
+	public  async tPost(url: string, formData: any, agentOptions: any) {
 		return new Promise(function (resolve, reject) {
 			const opts = {
 				"url": url,
@@ -34,7 +34,7 @@ export class HttpService {
 	 * get，请求数据
 	 * @param url
 	 */
-	public static async get(url: string) {
+	public  async get(url: string) {
 		return new Promise(function (resolve, reject) {
 			request.get({ "url": url }, function (error: any, response: any, body: any) {
 				if (error) {

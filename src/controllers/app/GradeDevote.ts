@@ -3,8 +3,8 @@ import { Context } from "koa";
 import { DrawReward } from "../../config/Type";
 import { GradeDevoteService } from "../../service/GradeDevote";
 import { Validate } from "../../utils/ReqValidate";
-import { successData } from "../../utils/returnResult";
-import { get, post, put } from "../../utils/decorator/httpMethod";
+import { ReturnResult } from "../../utils/ReturnResult";
+import { get, put } from "../../utils/decorator/httpMethod";
 
 /**
  * Created by wh on 2020/7/15
@@ -29,13 +29,13 @@ export default class GradeDevoteController {
 	public async findConfig(ctx: Context) {
 		const gradeDevoteList = await this.service.findConfig();
 
-		return (ctx.body = successData(gradeDevoteList));
+		return (ctx.body = ReturnResult.successData(gradeDevoteList));
 	}
 	/**
 	 * 领取奖励
 	 * @param ctx koa中间件
 	 */
-	@post("/draw_reward")
+	@put("/draw_reward")
 	public async drawReward(ctx: Context) {
                 // 验证
 		Validate.isId(ctx.request.body.uid);
@@ -46,6 +46,6 @@ export default class GradeDevoteController {
 		Validate.isNumber(drawReward.grade);
                 const state = await this.service.drawReward(drawReward);
 
-		return (ctx.body = successData(state));
+		return (ctx.body = ReturnResult.successData(state));
 	}
 }

@@ -39,6 +39,10 @@ export class StaticStr {
 	 */
 	public static WC_IP = "127.0.0.1";
 	/**
+	 * 企业红包ip
+	 */
+	public static WR_IP = "127.0.0.1";
+	/**
 	 * 企业转账失败字符串
 	 */
 	public static WC_ERR_MSG = "企业转账发起失败";

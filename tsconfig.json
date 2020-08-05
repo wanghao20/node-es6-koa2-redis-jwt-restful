@@ -4,10 +4,23 @@
 		"emitDecoratorMetadata": true,
 		"noImplicitAny": true,
 		"allowJs": true,
-
+		// 模块解析策略，"Classic" 或者 "Node"。如果module为"AMD"、"System"或者"ES6"，默认为"Classic"，否则默认为"Node"
+		"moduleResolution": "Node",
+		// 是否支持使用import cjs from 'cjs'的方式引入commonjs包
+		"esModuleInterop": false,
+		"target": "ES6",
+		// 编译为哪种模块系统。如果target为"ES3"或者"ES5"，默认为"CommonJS"，否则默认为"ES6"
+		"module": "CommonJS",
 		"sourceMap": true,
-		"lib": ["dom", "es2015"]
+		// 编译生成的js文件所输出的根目录,默认输出到ts文件所在的目录
+		"outDir": "dist",
+
+		"declaration": false,
+		"noResolve": false,
+		"lib": ["ES6"]
 	},
+	"typeRoots": ["node_modules/@types"],
+
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "**/*.spec.ts"]
 }

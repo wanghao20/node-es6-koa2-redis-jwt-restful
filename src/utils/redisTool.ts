@@ -1,6 +1,12 @@
 import * as ioredis from "ioredis";
 
+import fs = require("fs");
+
 import { BaseConfig } from "../config/Base";
+import { QUEUE_DATE_FORMAT } from "../config/BullConfig";
+import { KeyName } from "../config/RedisKeys";
+
+import { DateFormat } from "./DateFormat";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -25,7 +31,7 @@ export interface redisTool {
 	 * 删除string类型的key-value
 	 * @param key key
 	 */
-	delString(key: string): Promise<number | null>;
+	del(key: string): Promise<number | null>;
 
 	/**
 	 * 获取当前数据库key的数量
@@ -102,7 +108,7 @@ const redisConfig: RedisConfig = {
 	 * 端口
 	 */
 	"port": BaseConfig.REDIS_PORT,
-	// password: BaseConfig.REDIS_PASSWORD,
+	"password": BaseConfig.REDIS_PASSWORD,
 	"host": BaseConfig.REDIS_HOST,
 };
 
@@ -129,7 +135,7 @@ class RedisTool implements redisTool {
 			.then((res) => {
 				if (res) {
 					// tslint:disable-next-line:no-console
-					console.log("redis connet success");
+					console.log("redis连接成功!");
 				}
 			})
 			.catch((e) => {
@@ -191,11 +197,11 @@ class RedisTool implements redisTool {
 
 			return null;
 		}
-        }
-        /**
-         * 批量获取
-         * @param keys keys
-         */
+	}
+	/**
+	 * 批量获取
+	 * @param keys keys
+	 */
 	public async mget(keys: Array<string>) {
 		try {
 			const res = await this.redis.mget(keys);
@@ -209,13 +215,28 @@ class RedisTool implements redisTool {
 		}
 	}
 	/**
+	 * 批量获取key
+	 * @param keys 支持部分正则表达式
+	 */
+	public async keys(keys: string) {
+		try {
+			const res = await this.redis.keys(keys);
+
+			return res;
+		} catch (e) {
+			// tslint:disable-next-line:no-console
+			console.error(e.stack);
+
+			return null;
+		}
+	}
+	/**
 	 * 删除string类型的key-value
 	 * @param key key
 	 */
-	public async delString(key: string) {
-		const id: string = typeof key !== "string" ? JSON.stringify(key) : key;
+	public async del(key: string) {
 		try {
-			const res = await this.redis.del(id);
+			const res = await this.redis.del(key);
 
 			return res;
 		} catch (e) {
@@ -312,12 +333,160 @@ class RedisTool implements redisTool {
 		}
 	}
 	/**
+	 * 向list中压入元素
+	 * @param key key
+	 * @param values values
+	 */
+	public async lpush(key: string, values: Array<string>) {
+		try {
+			const res = await this.redis.lpush(key, values);
+
+			return res;
+		} catch (e) {
+			// tslint:disable-next-line:no-console
+			console.error(e);
+
+			return null;
+		}
+	}
+	/**
 	 * 获取指定的key中所有键值对
 	 * @param key key
 	 */
 	public async hgetall(key: string) {
 		try {
 			const res = await this.redis.hgetall(key);
+
+			return res;
+		} catch (e) {
+			// tslint:disable-next-line:no-console
+			console.error(e);
+
+			return null;
+		}
+	}
+	/**
+	 * 同时设置对个键值对数据
+	 * @param key key
+	 * @param value field,value,field,value,field,value
+	 */
+	public async hmset(key: string, value: []) {
+		try {
+			const res = await this.redis.hmset(key, value);
+
+			return res;
+		} catch (e) {
+			// tslint:disable-next-line:no-console
+			console.error(e);
+
+			return null;
+		}
+	}
+	/**
+	 * 有序集合添加成员
+	 * @param key key
+	 * @param score 分数(按照此对象排名)
+	 * @param value value
+	 */
+	public async zadd(key: string, score: number, value: string) {
+		try {
+			const res = await this.redis.zadd(key, score, value);
+
+			return res;
+		} catch (e) {
+			// tslint:disable-next-line:no-console
+			console.error(e);
+
+			return null;
+		}
+	}
+	/**
+	 * HyperLogLog是一种概率性数据结构，在标准误差0.81%的前提下，能够统计2^64个数据。
+	 * 参考资料:https://juejin.im/post/6844904097666039816
+	 *         https://juejin.im/post/6844903940585160718
+	 */
+	/**
+	 * HyperLogLog
+	 *  添加一个元素，如果重复，只算作一个
+	 * @param key key
+	 * @param score 分数(按照此对象排名)
+	 * @param value value
+	 */
+	public async pfadd(key: string, value: string) {
+		try {
+			const res = await this.redis.pfadd(key, value);
+
+			return res;
+		} catch (e) {
+			// tslint:disable-next-line:no-console
+			console.error(e);
+
+			return null;
+		}
+	}
+	/**
+	 * HyperLogLog
+	 * 返回元素数量的近似值
+	 * @param key key
+	 */
+	public async pfcount(key: string) {
+		try {
+			const res = await this.redis.pfcount(key);
+
+			return res;
+		} catch (e) {
+			// tslint:disable-next-line:no-console
+			console.error(e);
+
+			return null;
+		}
+	}
+	/**
+	 * HyperLogLog
+	 * 将多个 HyperLogLog 合并为一个 HyperLogLog
+	 * return OK.
+	 * @param key key
+	 */
+	public async pfmerge(key: string, sourcekey: any[]) {
+		try {
+			const res = await this.redis.pfmerge(key, sourcekey);
+
+			return res;
+		} catch (e) {
+			// tslint:disable-next-line:no-console
+			console.error(e);
+
+			return null;
+		}
+	}
+	/**
+	 * 在redis 2.2.0版本之后，新增了一个位图数据，其实它不是一种数据结构。实际上它就是一个一个字符串结构，
+	 * 只不过value是一个二进制数据， 每一位只能是0或者1。redis单独对bitmap提供了一套命令。可以对任意一位进行设置和读取,
+	 * https://blog.csdn.net/u011957758/article/details/74783347。
+	 * bitmap
+	 * @param key key
+	 * @param offset 第offset位(：给一个指定key的值得第offset位 赋值为value。)
+	 * @param value 值:0-1
+	 */
+	public async setbit(key: string, offset: number, value: string) {
+		try {
+			const res = await this.redis.setbit(key, offset, value);
+
+			return res;
+		} catch (e) {
+			// tslint:disable-next-line:no-console
+			console.error(e);
+
+			return null;
+		}
+	}
+	/**
+	 * 判断是否存在指定key
+	 * @param key key
+	 */
+	public async exists(key: string) {
+		try {
+			const res = await this.redis.exists(key);
 
 			return res;
 		} catch (e) {
@@ -343,13 +512,83 @@ class RedisTool implements redisTool {
 			return null;
 		}
 	}
+	/**
+	 * 设置key过期时间
+	 * @param key key
+	 * @param expiration 单位长度:秒
+	 */
+	public async expire(key: string, expiration: number) {
+		try {
+			const res = await this.redis.expire(key, expiration);
+
+			return res;
+		} catch (e) {
+			// tslint:disable-next-line:no-console
+			console.error(e);
+
+			return null;
+		}
+	}
+	/**
+	 * 活跃用户和非活跃用户数据处理
+	 * 执行lua脚本
+	 * @param key key
+	 * @param expiration 单位长度:秒
+	 */
+	public async redisLuaScript(path: string) {
+		try {
+			// 活跃用户和非活跃用户内存数据处理
+			// 设计思路:
+			// 每天凌晨0:00(具体时间可调整)时node调用redis执行lua脚本拿到不活跃用户保存数据库提出hash表
+			// lua脚本内容:
+			// 1:获取到redis中用户hash表里所有的活跃用户id
+			// 2:通过pfadd(key:前面两天的日期:value:用户id)判断用户前两天天是否登录过
+			// (HyperLogLog类型: 一亿条记录占用不到12k内存  set集合100w条数据占用111.12M,1000w条占用1.08G
+			// pfadd添加记录时已经存在会返回0,未存在返回1,在每日活跃用户接口处创建了对应的记录用来判断用户两天内是否登录过系统)
+			// 3:拿到所有未登录id从hash中持久化到数据库再从hash表中移除用户数据
+
+			// 测试执行脚本
+			// 所有玩家hash: HASH_OBJ_GAME_USERS *
+			const keys = [];
+			for (let i = 0; i < BaseConfig.DT_TIME; i++) {
+				const num = i + 1;
+				const day = DateFormat.today(num);
+				keys.push(KeyName.HLL_USER_STATS(num) + day);
+			}
+			// Script
+			const redisLuaScript: any = fs.readFileSync(path);
+
+			// eval(redisLuaScript:脚本   2:keys数量 key [key ...] arg [arg ...])
+                        // 计算keys数量:用户Hash表+天数keys长度+需要判断的天数keys
+                        // 2=>用户keyName+keysLen
+			const argLen = keys.length + 2;
+
+			const result = await this.redis.eval(
+				redisLuaScript,
+				argLen,
+				KeyName.HASH_OBJ_GAME_USERS,
+				"keysLen",
+				keys,
+				KeyName.HASH_OBJ_GAME_USERS,
+				keys.length,
+				keys
+			);
+
+			// console.log(result); //
+
+			return result;
+		} catch (e) {
+			// tslint:disable-next-line:no-console
+			console.error(e);
+
+			return null;
+		}
+	}
 }
 
-/*
-需要用到多少个数据库，就定义多少个实例常量，这样的好处是:
-每次个模块调用redis的时候，始终是取第一次生成的实例，避免了多次连接redis的尴尬
-*/
-export const redisDb1 = new RedisTool({ "db": 1 });
+/**
+ * 需要用到多少个数据库，就定义多少个实例常量，这样的好处是:
+ * 每次个模块调用redis的时候，始终是取第一次生成的实例，避免了多次连接redis的尴尬
+ */
+export const redisDb1 = new RedisTool({ "db": BaseConfig.SYSTEM_DB });
 // export const redis_db2 = new RedisTool({db:2})
-// export const redis_db3 = new RedisTool({db:3})
-// export const redis_db4 = new RedisTool({db:4})

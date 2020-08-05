@@ -1,5 +1,7 @@
 import { Context } from "koa";
+
 import { configure, getLogger } from "log4js";
+
 import { resolve } from "path";
 const logPath = resolve(__dirname, "../../logs"); // log存放路径，确保该路径存在
 /**
@@ -28,6 +30,17 @@ configure({
 			"pattern": ".yyyy-MM-dd",
 			"keepFileExt": true,
 		},
+		// http请求日志  http请求日志需要app.use引用一下， 这样才会自动记录每次的请求信息
+		"mysqlLog": {
+			"type": "dateFile",
+			"layout": {
+				"type": "pattern",
+				"pattern": "[%d{yyyy-MM-dd hh:mm:ss}] [%p] [%c] - %m",
+			},
+			"filename": logPath + "/mysqlLog.log",
+			"pattern": ".yyyy-MM-dd",
+			"keepFileExt": true,
+		},
 
 		// 错误日志 type:过滤类型logLevelFilter,将过滤error日志写进指定文件
 		"errorLog": {
@@ -47,6 +60,7 @@ configure({
 		"default": { "appenders": ["out", "errorLog"], "level": "trace" },
 		// appenders:采用的appender,取上面appenders项,level:设置级别
 		"http": { "appenders": ["out", "httpLog"], "level": "debug" },
+		"mysql": { "appenders": ["out", "mysqlLog"], "level": "debug" },
 		"error": { "appenders": ["out", "errorLog"], "level": "error" },
 	},
 });
@@ -56,16 +70,21 @@ configure({
  */
 export function logHttp() {
 	return async (ctx: Context, next: () => Promise<void>) => {
+                const remoteAddress = ctx.headers["x-forwarded-for"] || ctx.ip || ctx.ips || (ctx.socket && ctx.socket.remoteAddress);
 		const start = Date.now();
 		await next();
 		const ms = Date.now() - start;
 		// 不同类型记录
-		if (ctx.status === 200) { getLogger("http").info(`${ctx.method} ${ctx.url} ${ctx.status} - ${ms}ms`); }
+		if (ctx.status === 200) { getLogger("http").info(`${ctx.method} ${ctx.url} ${ctx.status} ${remoteAddress}- ${ms}ms`); }
 		else if (ctx.status === 500) {
-			getLogger("http").error(`${ctx.method} ${ctx.url} ${ctx.status} - ${ms}ms`);
-		} else { getLogger("http").warn(`${ctx.method} ${ctx.url} ${ctx.status} - ${ms}ms`); }
+			getLogger("http").error(`${ctx.method} ${ctx.url} ${ctx.status} ${remoteAddress}- ${ms}ms`);
+		} else { getLogger("http").warn(`${ctx.method} ${ctx.url} ${ctx.status} ${remoteAddress}- ${ms}ms`); }
 	};
 }
+/**
+ * 记录sql执行,写入日志文件
+ */
+export const mysqlLogger= getLogger("mysql");
 /**
  * 记录error,写入日志文件
  * @param str 待写入的错误信息

@@ -30,9 +30,13 @@ export class WeiChatUrlBaseConfig {
 	 */
 	public static transfermoneyUrl = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
 	/**
+	 * 微信企业红包
+	 */
+	public static senDredPackUrl = "https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack";
+	/**
 	 * 微信授权成功后访问该接口带参数code(需要在微信开发平台接口权限配置,否则会提示无效)
 	 */
-	public static returnUri = "http://www.******.com:8080/api/wechat/token";
+	public static returnUri = "http://192.168.12.245:9090/api/wechat/token";
 	/**
 	 *  第一步：通过appid换取网页授权code的Url
 	 * 此处URL是重定向到客户端授权URL
@@ -56,7 +60,7 @@ export class WeiChatUrlBaseConfig {
 	 *  第三步：拉取用户信息的Url
 	 */
 	public static getUserInfoUrl(accessToken: string, openid: string, code: string) {
-		const url = `https://api.weixin.qq.com/sns/userinfo?access_token=?access_token=${accessToken}&openid=${openid}&code=${code}&&lang=zh_CN`;
+		const url = `https://api.weixin.qq.com/sns/userinfo?access_token=?${accessToken}&openid=${openid}&code=${code}&&lang=zh_CN`;
 
 		return url;
 	}
