@@ -7,7 +7,7 @@ import { ConnectionOptions } from "typeorm";
 export const mysqlConfig: ConnectionOptions = {
         "name":"mysql",
 	"type": "mysql",
-	"host": "148.70.34.67",
+	"host": "",
 	"port": 3307,
 	"username": "root",
 	"password": "123456",
@@ -21,7 +21,7 @@ export const mysqlConfig: ConnectionOptions = {
 export const mongodbConfig: ConnectionOptions = {
         "name":"mongodb",
 	"type": "mongodb",
-	"host": "148.70.34.67",
+	"host": "",
 	"port": 27017,
 	"database": "test",
 	"useUnifiedTopology": true,
