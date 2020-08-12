@@ -12,7 +12,8 @@ export class BaseConfig {
 	/**
 	 * redis配置
 	 */
-	public static REDIS_HOST = "127.0.0.1";
+	// public static REDIS_HOST = "148.70.34.67";
+	public static REDIS_HOST = "localhost";
 	/**
 	 * redis端口配置
 	 */
@@ -20,11 +21,11 @@ export class BaseConfig {
 	/**
 	 * redis密码配置(需要在redisTool打开注释)
 	 */
-	public static REDIS_PASSWORD = "";
+	public static REDIS_PASSWORD = "Wh2319512282";
 	/**
 	 * redis db配置(项目使用)
 	 */
-	public static SYSTEM_DB = 1;
+	public static SYSTEM_DB = 3;
 	/**
 	 * redis db配置(MQ使用)
 	 */
@@ -42,6 +43,6 @@ export class BaseConfig {
          * 设置非活跃玩家判定时间(天数)
          * 玩家超过天数内未登录后清理redis内存数据
          */
-        public static DT_TIME = 4;
+        public static DT_TIME = 3;
 
 }

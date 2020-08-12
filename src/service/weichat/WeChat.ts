@@ -5,7 +5,7 @@ import path = require("path");
 import { Context } from "koa";
 
 import { StaticStr } from "../../config/StaticStr";
-import { EnAccountTransfer, PreArray, AgentOptionsTy, SenDredPack, RedArray } from "../../config/Type";
+import { EnAccountTransfer, PreArray, AgentOptionsTy, SenDredPack, RedArray } from "../../format/Type";
 import { VerifyException } from "../../utils/Exceptions";
 import { WeiChatBaseConfig } from "../../config/weichat/Config";
 import { WeiChatUrlBaseConfig } from "../../config/weichat/UrlBase";

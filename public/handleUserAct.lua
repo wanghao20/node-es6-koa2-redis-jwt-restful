@@ -35,6 +35,7 @@ for j = 1, #ids do
         if (state == 0) then
             -- 登录过
             isSgn = 0;
+            break
         end
     end
     if(isSgn==1) then

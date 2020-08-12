@@ -1,9 +1,10 @@
 import * as ioredis from "ioredis";
 
+import Redlock = require("redlock");
+
 import fs = require("fs");
 
 import { BaseConfig } from "../config/Base";
-import { QUEUE_DATE_FORMAT } from "../config/BullConfig";
 import { KeyName } from "../config/RedisKeys";
 
 import { DateFormat } from "./DateFormat";
@@ -45,7 +46,7 @@ export interface redisTool {
 	connToRedis(): Promise<unknown>;
 }
 /**
- * 定义接口
+ * 定义配置参数
  */
 interface RedisConfig {
 	/**
@@ -123,31 +124,32 @@ class RedisTool implements redisTool {
 	 */
 	public redis: ioredis.Redis;
 	/**
+	 * redis  分布式锁
+	 * https://github.com/mike-marcacci/node-redlock
+	 */
+	public redlock: Redlock;
+	/**
 	 * config
 	 */
 	public config: RedisConfig;
 	constructor(opt?: any) {
 		this.redis = null;
 		opt ? (this.config = Object.assign(redisConfig, opt)) : (this.config = redisConfig);
-
-		// this.connToRedis()
 		this.connToRedis()
 			.then((res) => {
 				if (res) {
-					// tslint:disable-next-line:no-console
 					console.log("redis连接成功!");
 				}
 			})
 			.catch((e) => {
-				// tslint:disable-next-line:no-console
-				console.error("The Redis Can not Connect:" + e);
+				console.error("Redis连接错误:" + e);
 			});
 	}
 
 	/**
 	 * 连接redis
 	 */
-	public connToRedis() {
+	public async connToRedis() {
 		return new Promise((resolve, reject) => {
 			if (this.redis) {
 				resolve(true); // 已创建
@@ -155,6 +157,11 @@ class RedisTool implements redisTool {
 				redisConnect(redisConfig)
 					.then((resp: ioredis.Redis) => {
 						this.redis = resp;
+						// 初始化锁
+						this.redlock = new Redlock([this.redis], {
+							"retryDelay": 200, // 两次尝试之间的时间间隔ms
+							"retryCount": 1, // 最大次数Redlock将尝试
+						});
 						resolve(true);
 					})
 					.catch((err) => {
@@ -165,6 +172,31 @@ class RedisTool implements redisTool {
 	}
 
 	/**
+	 * 基于redis分布式锁实现
+	 * @param ressourceId 要锁定的资源的字符串标识符
+	 */
+	public async lock(ressourceId: string) {
+                try {
+                        return await this.redlock.lock(ressourceId, 1000,);
+                        // lock.unlock();
+		} catch (err) {
+                        return false;
+		}
+        }
+        /**
+         * 解锁方法
+         * @param lock 锁对象
+         */
+        public async unlockLock (lock: any) {
+                lock.unlock(function (err: any){
+                        if (err) {
+                              console.log("解锁失败"+err);
+                        } else {
+                               console.log("解锁成功");
+                        }
+                    });
+        }
+	/**
 	 * 存储string类型的key-value
 	 * @param key key
 	 * @param value value
@@ -172,9 +204,17 @@ class RedisTool implements redisTool {
 	public async setString(key: string, value: any) {
 		const val: string = typeof value !== "string" ? JSON.stringify(value) : value;
 		try {
-			const res = await this.redis.set(key, val);
+                        const lock = await this.lock(key);
+                        if (lock) {
+                                const res = await this.redis.set(key, val);
+                                // 处理完成后解锁
+                                redisDb1.unlockLock(lock);
 
-			return res;
+                                return res;
+                        }else{
+                                // 其他线程在处理中
+                                console.log("其他线程在处理中");
+                        }
 		} catch (e) {
 			// tslint:disable-next-line:no-console
 			console.error(e);
@@ -236,9 +276,17 @@ class RedisTool implements redisTool {
 	 */
 	public async del(key: string) {
 		try {
-			const res = await this.redis.del(key);
+                        const lock = await this.lock(key);
+                        if (lock) {
+                                const res = await this.redis.del(key);
+                                // 处理完成后解锁
+                                redisDb1.unlockLock(lock);
 
-			return res;
+                                return res;
+                        }else{
+                                // 其他线程在处理中
+                                console.log("其他线程在处理中");
+                        }
 		} catch (e) {
 			// tslint:disable-next-line:no-console
 			console.error(e);
@@ -253,9 +301,17 @@ class RedisTool implements redisTool {
 	 */
 	public async sadd(key: string, value: any) {
 		try {
-			const res = await this.redis.sadd(key, value);
+                        const lock = await this.lock(key);
+                        if (lock) {
+                                const res = await this.redis.sadd(key, value);
+                                // 处理完成后解锁
+                                redisDb1.unlockLock(lock);
 
-			return res;
+                                return res;
+                        }else{
+                                // 其他线程在处理中
+                                console.log("其他线程在处理中");
+                        }
 		} catch (e) {
 			// tslint:disable-next-line:no-console
 			console.error(e);
@@ -305,9 +361,17 @@ class RedisTool implements redisTool {
 	 */
 	public async hset(key: string, field: string, value: any) {
 		try {
-			const res = await this.redis.hset(key, field, value);
+                        const lock = await this.lock(key);
+                        if (lock) {
+                                const res =await this.redis.hset(key, field, value);
+                                // 处理完成后解锁
+                                redisDb1.unlockLock(lock);
 
-			return res;
+                                return res;
+                        }else{
+                                // 其他线程在处理中
+                                console.log("其他线程在处理中");
+                        }
 		} catch (e) {
 			// tslint:disable-next-line:no-console
 			console.error(e);
@@ -339,9 +403,17 @@ class RedisTool implements redisTool {
 	 */
 	public async lpush(key: string, values: Array<string>) {
 		try {
-			const res = await this.redis.lpush(key, values);
+                        const lock = await this.lock(key);
+                        if (lock) {
+                                const res = await this.redis.lpush(key, values);
+                                // 处理完成后解锁
+                                redisDb1.unlockLock(lock);
 
-			return res;
+                                return res;
+                        }else{
+                                // 其他线程在处理中
+                                console.log("其他线程在处理中");
+                        }
 		} catch (e) {
 			// tslint:disable-next-line:no-console
 			console.error(e);
@@ -372,9 +444,17 @@ class RedisTool implements redisTool {
 	 */
 	public async hmset(key: string, value: []) {
 		try {
-			const res = await this.redis.hmset(key, value);
+                        const lock = await this.lock(key);
+                        if (lock) {
+                                const res = await this.redis.hmset(key, value);
+                                // 处理完成后解锁
+                                redisDb1.unlockLock(lock);
 
-			return res;
+                                return res;
+                        }else{
+                                // 其他线程在处理中
+                                console.log("其他线程在处理中");
+                        }
 		} catch (e) {
 			// tslint:disable-next-line:no-console
 			console.error(e);
@@ -390,9 +470,18 @@ class RedisTool implements redisTool {
 	 */
 	public async zadd(key: string, score: number, value: string) {
 		try {
-			const res = await this.redis.zadd(key, score, value);
+                        const lock = await this.lock(key);
+                        if (lock) {
+                                const res = await this.redis.zadd(key, score, value);
+                                // 处理完成后解锁
+                                redisDb1.unlockLock(lock);
 
-			return res;
+                                return res;
+                        }else{
+                                // 其他线程在处理中
+                                console.log("其他线程在处理中");
+                        }
+
 		} catch (e) {
 			// tslint:disable-next-line:no-console
 			console.error(e);
@@ -552,6 +641,7 @@ class RedisTool implements redisTool {
 			const keys = [];
 			for (let i = 0; i < BaseConfig.DT_TIME; i++) {
 				const num = i + 1;
+				// 模拟从日期前一天开始的日期到需要判断的天数
 				const day = DateFormat.today(num);
 				keys.push(KeyName.HLL_USER_STATS(num) + day);
 			}
@@ -559,8 +649,8 @@ class RedisTool implements redisTool {
 			const redisLuaScript: any = fs.readFileSync(path);
 
 			// eval(redisLuaScript:脚本   2:keys数量 key [key ...] arg [arg ...])
-                        // 计算keys数量:用户Hash表+天数keys长度+需要判断的天数keys
-                        // 2=>用户keyName+keysLen
+			// 计算keys数量:用户Hash表+天数keys长度+需要判断的天数keys
+			// 2=>用户keyName+keysLen
 			const argLen = keys.length + 2;
 
 			const result = await this.redis.eval(
@@ -572,13 +662,10 @@ class RedisTool implements redisTool {
 				KeyName.HASH_OBJ_GAME_USERS,
 				keys.length,
 				keys
-			);
-
-			// console.log(result); //
+                        );
 
 			return result;
 		} catch (e) {
-			// tslint:disable-next-line:no-console
 			console.error(e);
 
 			return null;
@@ -591,4 +678,5 @@ class RedisTool implements redisTool {
  * 每次个模块调用redis的时候，始终是取第一次生成的实例，避免了多次连接redis的尴尬
  */
 export const redisDb1 = new RedisTool({ "db": BaseConfig.SYSTEM_DB });
+export const limiterRedis = new ioredis(redisConfig);
 // export const redis_db2 = new RedisTool({db:2})

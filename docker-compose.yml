@@ -1,13 +1,63 @@
-version: "3"
-
+# 语法版本
+version: '3'
+# 此文件配置了多个服务
 services:
-  webapp:
-    image: web
-    ports:
-      - "8080:80"
-    volumes:
-      - "/data"
-  redis:
-    image: "redis:alpine"
+        mysql:
+                network_mode: "host"
+                
+                environment:  # 定义环境变量
+                        MYSQL_ROOT_PASSWORD: "123456"
+                        MYSQL_USER: 'root'
+                        MYSQL_PASS: '123456'
+                image: "mysql" 
+                restart: always # 连不上就一直重试
+                # depends_on:   选择依赖于某个服务，依赖的服务会先加载
+                #    - 'sss'
+                volumes:
+                        - "./root/data:/var/lib/mysql"
+                        - "./conf/my.cnf:/etc/my.cnf"
+                        - "./init:/docker-entrypoint-initdb.d/"
+                ports:
+                        - "3306:3306"
+      
+        redis:
+                image: redis
+                ports:
+                        - "6379"
+                network_mode: "host"
+        app: 
+                image: wechat_money_king_server
+                container_name: node
+                network_mode: "host"
+                volumes:
+                        - ./dist:/usr/src/app/dist
+                        - ./logs:/usr/src/app/logs
+                build: ./
+                ports:
+                        - 8081:9090
+                environment:
+                        - TZ=Asia/Shanghai
+                restart: always
+                depends_on: # 这个标签解决了容器的依赖、启动先后的问题。
+                        - mysql
+                        - redis
 
-
+                expose:
+                        - 8081
+                
+        nginx:
+                image: nginx:1.19.0-alpine
+                container_name: nginx
+                volumes:
+                        - /root/conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+                ports:
+                        - 8080:80
+                environment:
+                        - TZ=Asia/Shanghai
+                restart: always
+                depends_on:
+                        - app
+                links: # host名代替ip配置nginx的转发
+                        - app
+                expose:
+                        - 8080

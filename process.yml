@@ -1,0 +1,8 @@
+- script   : bin/server.js
+name     : skel
+instances: 4
+exec_mode: cluster
+env:
+ NODE_ENV: test
+env_production:
+ NODE_ENV: production

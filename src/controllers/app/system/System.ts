@@ -4,7 +4,7 @@ import { SystemService } from "../../../service/System";
 import { Validate } from "../../../utils/ReqValidate";
 import { ReturnResult } from "../../../utils/ReturnResult";
 import { get, put, post } from "../../../utils/decorator/httpMethod";
-import { CltLog } from "../../../entity/CleLog";
+import { CltLog } from "../../../entity/mysql/CleLog";
 
 /**
  * Created by wh on 2020/7/15

@@ -8,20 +8,20 @@ export class WeiChatBaseConfig {
 	/**
 	 * 企业转账商户号appid
 	 */
-	public static appID = "";
+	public static appID = "wxa9d990edf6466ab2";
 	/**
 	 * 企业转账商户号appsecret
 	 */
-	public static appSecret = "";
+	public static appSecret = "db237e5f7e8caf2644a8f5cb00deee54";
 
 	/**
 	 * 公众号红包appid
 	 */
-        public static oaAppID = "";
+        public static oaAppID = "wx7076a3612fb659d3";
         	/**
 	 * 公众号红包appid
 	 */
-	public static oaAppSecret = "";
+	public static oaAppSecret = "95438d19e05d0691fc322e1c74bc38a6";
 
 	/**
 	 * 红包发送者名称
@@ -70,11 +70,11 @@ export class WeiChatBaseConfig {
 	/**
 	 * 企业转账商户号id(涉及支付)
 	 */
-	public static mchid = "";
+	public static mchid = "1483831402";
 	/**
 	 * 企业商户key(key为商户平台设置的密钥key)
 	 */
-	public static merchantKey = "";
+	public static merchantKey = "98f93dd3122ee82c5635ab432593ferd";
 	/**
 	 * 证书地址
 	 */

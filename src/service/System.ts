@@ -1,13 +1,13 @@
 import { QUEUE_DATE_FORMAT } from "../config/BullConfig";
 import { KeyName } from "../config/RedisKeys";
 import { StaticStr } from "../config/StaticStr";
-import { TbLogContent } from "../config/Type";
-import { Database } from "../dataBase/Database";
-import { CltLog } from "../entity/CleLog";
+import { TbLogContent } from "../format/Type";
+import { MysqlDatabase } from "../dataBase/MysqlDatabase";
 import { BullMQ } from "../utils/BullMQ";
 import { DateFormat } from "../utils/DateFormat";
 import { VerifyException } from "../utils/Exceptions";
 import { redisDb1 } from "../utils/RedisTool";
+import { CltLog } from "../entity/mysql/CleLog";
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -20,16 +20,16 @@ export class SystemService {
 	public bullDao: BullMQ;
 
 	constructor() {
-		this.bullDao = new BullMQ();
+                this.bullDao = new BullMQ();
 	}
 	/**
 	 * 查询全局配置Service
 	 */
 	public async findConfig() {
 		// 从Redis拿取数据
-		const system = await redisDb1.getString(KeyName.STR_CONFIG_SYSTETMF_INDKEY);
+                const system = await redisDb1.getString(KeyName.STR_CONFIG_SYSTETMF_INDKEY);
 		if (system) {
-			return system;
+			return system ;
 		}
 		throw new VerifyException(StaticStr.ERR_MSG_SYS_F, StaticStr.ERR_CODE_DEFAULT);
 	}
@@ -38,7 +38,7 @@ export class SystemService {
 	 */
 	public async tbLog(name: string) {
 		const sqlCommand = "call proc_tb_log_find(?);";
-		const tbLogs = await Database.executeProc(sqlCommand, name);
+		const tbLogs = await MysqlDatabase.executeProc(sqlCommand, name);
 
 		return tbLogs;
 	}

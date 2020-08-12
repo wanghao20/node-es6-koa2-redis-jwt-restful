@@ -30,7 +30,7 @@ configure({
 			"pattern": ".yyyy-MM-dd",
 			"keepFileExt": true,
 		},
-		// http请求日志  http请求日志需要app.use引用一下， 这样才会自动记录每次的请求信息
+		// 数据库操作日志
 		"mysqlLog": {
 			"type": "dateFile",
 			"layout": {
@@ -38,6 +38,17 @@ configure({
 				"pattern": "[%d{yyyy-MM-dd hh:mm:ss}] [%p] [%c] - %m",
 			},
 			"filename": logPath + "/mysqlLog.log",
+			"pattern": ".yyyy-MM-dd",
+			"keepFileExt": true,
+		},
+		// 数据库操作日志
+		"mongoLog": {
+			"type": "dateFile",
+			"layout": {
+				"type": "pattern",
+				"pattern": "[%d{yyyy-MM-dd hh:mm:ss}] [%p] [%c] - %m",
+			},
+			"filename": logPath + "/mongoLog.log",
 			"pattern": ".yyyy-MM-dd",
 			"keepFileExt": true,
 		},
@@ -61,6 +72,7 @@ configure({
 		// appenders:采用的appender,取上面appenders项,level:设置级别
 		"http": { "appenders": ["out", "httpLog"], "level": "debug" },
 		"mysql": { "appenders": ["out", "mysqlLog"], "level": "debug" },
+		"mongo": { "appenders": ["out", "mongoLog"], "level": "debug" },
 		"error": { "appenders": ["out", "errorLog"], "level": "error" },
 	},
 });
@@ -85,6 +97,10 @@ export function logHttp() {
  * 记录sql执行,写入日志文件
  */
 export const mysqlLogger= getLogger("mysql");
+/**
+ * 记录数据库操作,写入日志文件
+ */
+export const mongoLogger= getLogger("mongo");
 /**
  * 记录error,写入日志文件
  * @param str 待写入的错误信息

@@ -1,5 +1,5 @@
 import { StaticStr } from "../config/StaticStr";
-import { ResData } from "../config/Type";
+import { ResData } from "../format/Type";
 
 /**
  * Created by wh on 2020/7/15

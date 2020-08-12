@@ -3,6 +3,6 @@
  * author: wanghao
  * @desc： jwt加密使用的秘钥
  */
-export const JWT_SECRET = "secret";
+export const JWT_SECRET = "secret_2020-8-20";
 // 路由配置
 export const ROUTER_MAP = Symbol("route_map");

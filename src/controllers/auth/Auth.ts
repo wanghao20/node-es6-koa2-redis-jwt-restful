@@ -3,7 +3,7 @@ import jwt = require("jsonwebtoken");
 import { Context } from "koa";
 
 import { JWT_SECRET } from "../../config/Constants";
-import { TokenConfig } from "../../config/Type";
+import { TokenConfig } from "../../format/Type";
 import { AccountService } from "../../service/Auth";
 import { Validate } from "../../utils/ReqValidate";
 import { ReturnResult } from "../../utils/ReturnResult";

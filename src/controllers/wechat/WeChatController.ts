@@ -1,6 +1,6 @@
 import { Context } from "koa";
 
-import { EnAccountTransfer, SenDredPack } from "../../config/Type";
+import { EnAccountTransfer, SenDredPack } from "../../format/Type";
 import { Validate } from "../../utils/ReqValidate";
 import { ReturnResult } from "../../utils/ReturnResult";
 import { WeChatService } from "../../service/weichat/WeChat";

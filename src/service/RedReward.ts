@@ -1,6 +1,6 @@
-import { GlobalVar } from "../config/GlobalVar";
+import { GlobalVar } from "../entity/GlobalVar";
 import { KeyName } from "../config/RedisKeys";
-import { RedEnvelopeVal } from "../config/ReturnFormat";
+import { RedEnvelopeVal } from "../format/ReturnFormat";
 import { DateFormat } from "../utils/DateFormat";
 import { VerifyException } from "../utils/Exceptions";
 import { redisDb1 } from "../utils/RedisTool";

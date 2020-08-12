@@ -1,4 +1,3 @@
-import argon2 = require("argon2");
 import { v4 as uuidv4 } from "uuid";
 import { KeyName } from "../config/RedisKeys";
 import { VerifyException } from "../utils/Exceptions";
@@ -24,7 +23,8 @@ export class AccountService {
 		if (name !== userName) {
 			throw new VerifyException(StaticStr.USERNAME_ERR_MSG, StaticStr.ERR_CODE_DEFAULT);
 		}
-		if (!(await argon2.verify(pwd, passWord))) {
+		// if (!(await argon2.verify(pwd, passWord))) { // todo argon2模块有问题,后面选择其他模块
+		if (pwd===passWord) {
 			throw new VerifyException(StaticStr.USERNAME_ERR_MSG, StaticStr.ERR_CODE_DEFAULT);
 		}
 
@@ -41,7 +41,7 @@ export class AccountService {
 		// 保存到数据库
 		redisDb1.hset(KeyName.HASH_OBJ_GAME_USERS + uid, "id", uid);
 		redisDb1.hset(KeyName.HASH_OBJ_GAME_USERS + uid, "name", userName);
-		redisDb1.hset(KeyName.HASH_OBJ_GAME_USERS + uid, "passWord", await argon2.hash(passWord));
+		redisDb1.hset(KeyName.HASH_OBJ_GAME_USERS + uid, "passWord", passWord);// todo 暂未加密,后面处理
 
 		return { "id": uid, "name": userName };
 	}

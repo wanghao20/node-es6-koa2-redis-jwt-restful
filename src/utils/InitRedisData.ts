@@ -2,9 +2,9 @@ import { AdvancedConsoleLogger, getMongoManager } from "typeorm";
 
 import fs = require("fs");
 
-import { GlobalVar } from "../config/GlobalVar";
+import { GlobalVar } from "../entity/GlobalVar";
 import { KeyName } from "../config/RedisKeys";
-import { DrawReward, TbLogContent, TbLog } from "../config/Type";
+import { DrawReward, TbLogContent, TbLog } from "../format/Type";
 // import { DrawRewardEntity } from "../entity/DrawRewardEntity";
 
 import { DateFormat } from "./DateFormat";
@@ -77,33 +77,33 @@ export class InitRedisData {
 
 		// 玩家数据
 		const gameUserList = [];
+		// gameUserList.push({
+		// 	"id": "A",
+		// 	"name": "玩家A",
+		// 	"headImg": "头像",
+		// 	"grade": 1,
+		// 	"friends": [2, 3],
+		// 	"ingotReward": 5,
+		// 	"roleId": ["id1", "id2"],
+		// 	"superiorId": "2",
+		// 	"drawRewardGrade": 2,
+		// 	"devote": 0,
+		// });
+		// gameUserList.push({
+		// 	"id": "B",
+		// 	"name": "玩家B",
+		// 	"headImg": "头像",
+		// 	"grade": 1,
+		// 	"friends": [2, 3],
+		// 	"ingotReward": 5,
+		// 	"roleId": ["id3", "id4"],
+		// 	"superiorId": "",
+		// 	"drawRewardGrade": 2,
+		// 	"devote": 0,
+		// });
 		gameUserList.push({
-			"id": 1,
-			"name": "玩家1",
-			"headImg": "头像",
-			"grade": 1,
-			"friends": [2, 3],
-			"ingotReward": 5,
-			"roleId": ["id1", "id2"],
-			"superiorId": "2",
-			"drawRewardGrade": 2,
-			"devote": 0,
-		});
-		gameUserList.push({
-			"id": 2,
-			"name": "玩家2",
-			"headImg": "头像",
-			"grade": 1,
-			"friends": [2, 3],
-			"ingotReward": 5,
-			"roleId": ["id3", "id4"],
-			"superiorId": "",
-			"drawRewardGrade": 2,
-			"devote": 0,
-		});
-		gameUserList.push({
-			"id": 3,
-			"name": "玩家3",
+			"id": "C",
+			"name": "玩家C",
 			"headImg": "头像",
 			"grade": 1,
 			"friends": [2, 3],
@@ -113,6 +113,54 @@ export class InitRedisData {
 			"drawRewardGrade": 2,
 			"devote": 0,
 		});
+		// gameUserList.push({
+		// 	"id": "D",
+		// 	"name": "玩家D",
+		// 	"headImg": "头像",
+		// 	"grade": 1,
+		// 	"friends": [2, 3],
+		// 	"ingotReward": 5,
+		// 	"roleId": ["id5", "id6"],
+		// 	"superiorId": "2",
+		// 	"drawRewardGrade": 2,
+		// 	"devote": 0,
+		// });
+		// gameUserList.push({
+		// 	"id": "E",
+		// 	"name": "玩家E",
+		// 	"headImg": "头像",
+		// 	"grade": 1,
+		// 	"friends": [2, 3],
+		// 	"ingotReward": 5,
+		// 	"roleId": ["id5", "id6"],
+		// 	"superiorId": "2",
+		// 	"drawRewardGrade": 2,
+		// 	"devote": 0,
+		// });
+		gameUserList.push({
+			"id": "F",
+			"name": "玩家F",
+			"headImg": "头像",
+			"grade": 1,
+			"friends": [2, 3],
+			"ingotReward": 5,
+			"roleId": ["id5", "id6"],
+			"superiorId": "2",
+			"drawRewardGrade": 2,
+			"devote": 0,
+		});
+		// gameUserList.push({
+		// 	"id": "G",
+		// 	"name": "玩家G",
+		// 	"headImg": "头像",
+		// 	"grade": 1,
+		// 	"friends": [2, 3],
+		// 	"ingotReward": 5,
+		// 	"roleId": ["id5", "id6"],
+		// 	"superiorId": "2",
+		// 	"drawRewardGrade": 2,
+		// 	"devote": 0,
+		// });
 		gameUserList.forEach((v) => {
 			redisDb1.hset(KeyName.HASH_OBJ_GAME_USERS + v.id, "id", v.id);
 			redisDb1.hset(KeyName.HASH_OBJ_GAME_USERS + v.id, "name", v.name);
@@ -123,15 +171,38 @@ export class InitRedisData {
 			redisDb1.hset(KeyName.HASH_OBJ_GAME_USERS + v.id, "roleId", JSON.stringify(v.roleId));
 			redisDb1.hset(KeyName.HASH_OBJ_GAME_USERS + v.id, "superiorId", v.superiorId);
 			redisDb1.hset(KeyName.HASH_OBJ_GAME_USERS + v.id, "drawRewardGrade", v.drawRewardGrade);
-		});
-		// 攻打记录
-		const attackLogList = [];
-		attackLogList.push({ "generateDate": "2020-07-13T16:06:05.000+0000", "attackerId": "1", "beAttackerId": "2", "winLose": 1 });
-		attackLogList.push({ "generateDate": "2020-07-13T16:08:05.000+0000", "attackerId": "1", "beAttackerId": "3", "winLose": 0 });
-		attackLogList.push({ "generateDate": "2020-07-13T16:08:05.000+0000", "attackerId": "3", "beAttackerId": "1", "winLose": 1 });
-		attackLogList.forEach((v) => {
-			redisDb1.sadd(KeyName.SET_OBJ_ATTACK_LOG_ID(v.attackerId), JSON.stringify(v));
-		});
+                });
+                // 模拟用户登录统计
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(1) + DateFormat.today(7), "A");
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(2) + DateFormat.today(7), "A");
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(3) + DateFormat.today(7), "A");
+
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(1) + DateFormat.today(6), "B");
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(2) + DateFormat.today(6), "B");
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(3) + DateFormat.today(6), "B");
+
+                await redisDb1.pfadd(KeyName.HLL_USER_STATS(1) + DateFormat.today(1), "C");
+                await redisDb1.pfadd(KeyName.HLL_USER_STATS(2) + DateFormat.today(1), "C");
+                await redisDb1.pfadd(KeyName.HLL_USER_STATS(3) + DateFormat.today(1), "C");
+
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(1) + DateFormat.today(4), "D");
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(2) + DateFormat.today(4), "D");
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(3) + DateFormat.today(4), "D");
+
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(1) + DateFormat.today(3), "E");
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(2) + DateFormat.today(3), "E");
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(3) + DateFormat.today(3), "E");
+
+                // 第一次过滤正常模拟第二次过滤
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(1) + DateFormat.today(2), "F");
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(2) + DateFormat.today(2), "F");
+                // await redisDb1.pfadd(KeyName.HLL_USER_STATS(3) + DateFormat.today(2), "F");
+
+                // 第二次过滤正常模拟第三次过滤
+                await redisDb1.pfadd(KeyName.HLL_USER_STATS(1) + DateFormat.today(1), "G");
+                await redisDb1.pfadd(KeyName.HLL_USER_STATS(2) + DateFormat.today(1), "G");
+                await redisDb1.pfadd(KeyName.HLL_USER_STATS(3) + DateFormat.today(1), "G");
+
 		// 等级贡献
 		// 默认等级奖励对应数据
 		// 从json文件读取

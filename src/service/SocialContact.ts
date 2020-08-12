@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { GlobalVar } from "../config/GlobalVar";
+import { GlobalVar } from "../entity/GlobalVar";
 import { KeyName } from "../config/RedisKeys";
-import { ArmyList, Expeditions } from "../config/ReturnFormat";
-import { AttackDate } from "../config/Type";
+import { ArmyList, Expeditions } from "../format/ReturnFormat";
+import { AttackDate } from "../format/Type";
 import { redisDb1 } from "../utils/RedisTool";
 /**
  * Created by wh on 2020/7/15

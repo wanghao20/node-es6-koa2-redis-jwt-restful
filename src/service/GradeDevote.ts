@@ -1,5 +1,5 @@
 import { KeyName } from "../config/RedisKeys";
-import { DrawReward } from "../config/Type";
+import { DrawReward } from "../format/Type";
 import { VerifyException } from "../utils/Exceptions";
 import { redisDb1 } from "../utils/RedisTool";
 import { StaticStr } from "../config/StaticStr";

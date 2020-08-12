@@ -4,7 +4,7 @@ import path = require("path");
 import { resolve } from "path";
 import "reflect-metadata";
 import { ROUTER_MAP } from "../config/Constants";
-import { RouteMeta } from "../config/Type";
+import { RouteMeta } from "../format/Type";
 const ctrPath = resolve(__dirname, "../controllers");
 /**
  * Created by wh on 2020/7/15

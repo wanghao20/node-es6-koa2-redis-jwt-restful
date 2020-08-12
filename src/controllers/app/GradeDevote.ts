@@ -1,6 +1,6 @@
 import { Context } from "koa";
 
-import { DrawReward } from "../../config/Type";
+import { DrawReward } from "../../format/Type";
 import { GradeDevoteService } from "../../service/GradeDevote";
 import { Validate } from "../../utils/ReqValidate";
 import { ReturnResult } from "../../utils/ReturnResult";
