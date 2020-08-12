@@ -12,7 +12,7 @@ export class BaseConfig {
 	/**
 	 * redis配置
 	 */
-	// public static REDIS_HOST = "148.70.34.67";
+	// public static REDIS_HOST = "";
 	public static REDIS_HOST = "localhost";
 	/**
 	 * redis端口配置
@@ -21,7 +21,7 @@ export class BaseConfig {
 	/**
 	 * redis密码配置(需要在redisTool打开注释)
 	 */
-	public static REDIS_PASSWORD = "Wh2319512282";
+	public static REDIS_PASSWORD = "123456";
 	/**
 	 * redis db配置(项目使用)
 	 */
