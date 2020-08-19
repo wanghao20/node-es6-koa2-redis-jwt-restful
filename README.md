@@ -2,14 +2,16 @@
 
 ## 环境依赖
 
-node v0.10.28+
-reids ~
+node v12.18.2
+reids v3.2+
+mysql(可在配置中关闭)
+mongo(可在配置中关闭)
 
 ## 部署步骤
 
-### &nbsp;&nbsp; 1. 配置 Redis
+### &nbsp;&nbsp;1. 配置 Redis,配置数据库或者在app.ts注释掉数据库连接
 
-### &nbsp;&nbsp;2. npm install //安装 node 运行环境
+### &nbsp;&nbsp;2. npm install //安装项目依赖
 
 ### &nbsp;&nbsp;3. npm start 启动
 
@@ -89,6 +91,10 @@ reids ~
 
 #### ├── .prettierrc.js // 语法规范格式文件
 
+#### ├── .docker-compose.yml // docker 镜像整合文件(配置镜像之间的网络依赖关系)
+
+#### ├── .Dockerfile // docker打包成镜像配置文件
+
 #### ├── ormconfig.json // orm 配置
 
 #### ├── server.ts // 服务器启动文件
@@ -99,6 +105,3 @@ reids ~
 
 #### ├── tslint.json // 语法规范格式文件
 
-####
-
-## 注意 如果 argon2(加密)模块报错请在 cnpm 安装

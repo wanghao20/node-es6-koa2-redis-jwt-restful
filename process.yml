@@ -5,4 +5,5 @@ exec_mode: cluster
 env:
  NODE_ENV: test
 env_production:
- NODE_ENV: production
+ NODE_ENV: product  ion
+#  max_memory_restart: "300M",//设置node单个进程可占用最大的内存，如果内存使用率超过300M，pm2自动重启该进程

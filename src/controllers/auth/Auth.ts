@@ -18,46 +18,46 @@ export default class AuthController {
 	/**
 	 * 逻辑处理service类
 	 */
-	private readonly service: AccountService;
+    private readonly service: AccountService;
 
-	constructor () {
-		this.service = new AccountService();
-	}
+    constructor() {
+        this.service = new AccountService();
+    }
 
 	/**
 	 * 登录接口Controller
 	 * @param ctx koa中间件
 	 */
-	@post("/login")
-	public async login (ctx: Context) {
-		// 验证
-		Validate.user(ctx.request.body.username, ctx.request.body.password);
-		const user = await this.service.verifyPassword(ctx.request.body.username, ctx.request.body.password);
-		// 设置10小时过期时间
-		const tconfig: TokenConfig = {
-			"exp": Math.floor(Date.now() / 1000) + 600 * 60,
-			"data": { "id": user.id },
-		};
-		const token = jwt.sign(tconfig, JWT_SECRET);
+    @post("/login")
+    public async login(ctx: Context) {
+        // 验证
+        Validate.user(ctx.request.body.username, ctx.request.body.password);
+        const user = await this.service.verifyPassword(ctx.request.body.username, ctx.request.body.password);
+        // 设置10小时过期时间
+        const tconfig: TokenConfig = {
+            "exp": Math.floor(Date.now() / 1000) + 600 * 60,
+            "data": { "id": user.id },
+        };
+        const token = jwt.sign(tconfig, JWT_SECRET);
 
-		return (ctx.body = ReturnResult.successData({ "token": token, user }));
-	}
+        return (ctx.body = ReturnResult.successData({ "token": token, user }));
+    }
 
 	/**
 	 * 注册接口Controller
 	 * @param ctx koa中间件
 	 */
-	@post("/register")
-	public async register (ctx: Context) {
-		Validate.user(ctx.request.body.username, ctx.request.body.password);
-		const user = await this.service.insert(ctx.request.body.username, ctx.request.body.password);
-		// 设置10小时过期时间
-		const tconfig: TokenConfig = {
-			"exp": Math.floor(Date.now() / 1000) + 600 * 60,
-			"data": { "id": user.id },
-		};
-		const token = jwt.sign(tconfig, JWT_SECRET);
+    @post("/register")
+    public async register(ctx: Context) {
+        Validate.user(ctx.request.body.username, ctx.request.body.password);
+        const user = await this.service.insert(ctx.request.body.username, ctx.request.body.password);
+        // 设置10小时过期时间
+        const tconfig: TokenConfig = {
+            "exp": Math.floor(Date.now() / 1000) + 600 * 60,
+            "data": { "id": user.id },
+        };
+        const token = jwt.sign(tconfig, JWT_SECRET);
 
-		return (ctx.body = ReturnResult.successData({ "token": token, user }));
-	}
+        return (ctx.body = ReturnResult.successData({ "token": token, user }));
+    }
 }

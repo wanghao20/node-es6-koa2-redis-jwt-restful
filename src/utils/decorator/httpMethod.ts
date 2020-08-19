@@ -10,17 +10,17 @@ import { ROUTER_MAP } from "../../config/Constants";
  * @return Decorator - 装饰器
  */
 // tslint:disable-next-line:only-arrow-functions
-function createMethodDecorator (method: string) {
-  // 装饰器接收路由 path 作为参数
-  // tslint:disable-next-line:only-arrow-functions
-  return function httpMethodDecorator (path: string, isVerify?: boolean) {
-    return (proto: any, name: string) => {
-      const target = proto.constructor;
-      const routeMap = Reflect.getMetadata(ROUTER_MAP, target, "method") || [];
-      routeMap.push({ name, method, path, "isVerify": !!isVerify });
-      Reflect.defineMetadata(ROUTER_MAP, routeMap, target, "method");
+function createMethodDecorator(method: string) {
+    // 装饰器接收路由 path 作为参数
+    // tslint:disable-next-line:only-arrow-functions
+    return function httpMethodDecorator(path: string, isVerify?: boolean) {
+        return (proto: any, name: string) => {
+            const target = proto.constructor;
+            const routeMap = Reflect.getMetadata(ROUTER_MAP, target, "method") || [];
+            routeMap.push({ name, method, path, "isVerify": !!isVerify });
+            Reflect.defineMetadata(ROUTER_MAP, routeMap, target, "method");
+        };
     };
-  };
 }
 
 // 导出 http method 装饰器

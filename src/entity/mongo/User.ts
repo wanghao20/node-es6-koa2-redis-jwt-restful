@@ -9,16 +9,16 @@ export class User {
 	/**
 	 * id
 	 */
-	@PrimaryColumn()
-        public id: string;
-        /**
-         * name
-         */
-	@Column()
-        public name: string;
-        /**
-         * 密码
-         */
-	@Column()
-        public passWord: string;
+    @PrimaryColumn()
+    public id: string;
+    /**
+     * name
+     */
+    @Column()
+    public name: string;
+    /**
+     * 密码
+     */
+    @Column()
+    public passWord: string;
 }

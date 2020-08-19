@@ -14,34 +14,34 @@ export class HttpService {
 	 * @param body
 	 * @returns {Observable<Response>}
 	 */
-	public  async tPost(url: string, formData: any, agentOptions: any) {
-		return new Promise(function (resolve, reject) {
-			const opts = {
-				"url": url,
-				"method": "POST",
-				"body": formData,
-				"agentOptions": agentOptions,
-			};
-			request(opts, function (error: any, response: any, body: any) {
-				if (error) {
-					return reject({ "successed": false, "error": error });
-				}
-				resolve({ "successed": true, "response": response, "body": body });
-			});
-		});
-	}
+    public async tPost(url: string, formData: any, agentOptions: any) {
+        return new Promise(function (resolve, reject) {
+            const opts = {
+                "url": url,
+                "method": "POST",
+                "body": formData,
+                "agentOptions": agentOptions,
+            };
+            request(opts, function (error: any, response: any, body: any) {
+                if (error) {
+                    return reject({ "successed": false, "error": error });
+                }
+                resolve({ "successed": true, "response": response, "body": body });
+            });
+        });
+    }
 	/**
 	 * get，请求数据
 	 * @param url
 	 */
-	public  async get(url: string) {
-		return new Promise(function (resolve, reject) {
-			request.get({ "url": url }, function (error: any, response: any, body: any) {
-				if (error) {
-					return reject({ "successed": false, "error": error });
-				}
-				resolve({ "successed": true, "response": response, "body": body });
-			});
-		});
-	}
+    public async get(url: string) {
+        return new Promise(function (resolve, reject) {
+            request.get({ "url": url }, function (error: any, response: any, body: any) {
+                if (error) {
+                    return reject({ "successed": false, "error": error });
+                }
+                resolve({ "successed": true, "response": response, "body": body });
+            });
+        });
+    }
 }

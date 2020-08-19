@@ -11,25 +11,26 @@ export class MongoDatabase {
 	/**
 	 * 获取数据库连接
 	 */
-	public static getConnection() {
-		return getConnection("mongodb");
-	}
+    public static getConnection() {
+        return getConnection("mysql");
+    }
+    // todo 自定义的方法使用redis分布式锁或者在数据库中开启事务
 }
 
 /**
  * 用我们自己的logger来接管typeorm logger
  */
-export class  MongoDbLogger implements Logger {
+export class MongoDbLogger implements Logger {
 	/**
 	 * 基础查询
 	 * @param query
 	 * @param parameters
 	 * @param queryRunner
 	 */
-	public logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner) {
-		const log = "sqlCommand:" + query + " parameters:" + parameters;
-                mongoLogger.info(log);
-	}
+    public logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner) {
+        const log = "sqlCommand:" + query + " parameters:" + parameters;
+        mongoLogger.info(log);
+    }
 
 	/**
 	 * 日志记录
@@ -38,10 +39,10 @@ export class  MongoDbLogger implements Logger {
 	 * @param parameters
 	 * @param queryRunner
 	 */
-	public logQueryError(error: string, query: string, parameters?: any[], queryRunner?: QueryRunner) {
-		const log = "sqlCommand:" + query + " parameters:" + parameters;
-		mongoLogger.error(log, error);
-	}
+    public logQueryError(error: string, query: string, parameters?: any[], queryRunner?: QueryRunner) {
+        const log = "sqlCommand:" + query + " parameters:" + parameters;
+        mongoLogger.error(log, error);
+    }
 	/**
 	 *日志记录
 	 * @param time
@@ -49,27 +50,27 @@ export class  MongoDbLogger implements Logger {
 	 * @param parameters
 	 * @param queryRunner
 	 */
-	public logQuerySlow(time: number, query: string, parameters?: any[], queryRunner?: QueryRunner) {
-		mongoLogger.info(query, time);
-	}
+    public logQuerySlow(time: number, query: string, parameters?: any[], queryRunner?: QueryRunner) {
+        mongoLogger.info(query, time);
+    }
 
 	/**
 	 * 日志记录
 	 * @param message
 	 * @param queryRunner
 	 */
-	public logSchemaBuild(message: string, queryRunner?: QueryRunner) {
-		mongoLogger.info(message);
-	}
+    public logSchemaBuild(message: string, queryRunner?: QueryRunner) {
+        mongoLogger.info(message);
+    }
 
 	/**
 	 * 日志记录
 	 * @param message
 	 * @param queryRunner
 	 */
-	public logMigration(message: string, queryRunner?: QueryRunner) {
-		mongoLogger.info(message);
-	}
+    public logMigration(message: string, queryRunner?: QueryRunner) {
+        mongoLogger.info(message);
+    }
 
 	/**
 	 *日志记录
@@ -77,15 +78,15 @@ export class  MongoDbLogger implements Logger {
 	 * @param message
 	 * @param queryRunner
 	 */
-	public log(level: "log" | "info" | "warn", message: any, queryRunner?: QueryRunner) {
-		switch (level) {
-			case "info": {
-				mongoLogger.info(message);
-				break;
-			}
-			case "warn": {
-				mongoLogger.warn(message);
-			}
-		}
-	}
+    public log(level: "log" | "info" | "warn", message: any, queryRunner?: QueryRunner) {
+        switch (level) {
+            case "info": {
+                mongoLogger.info(message);
+                break;
+            }
+            case "warn": {
+                mongoLogger.warn(message);
+            }
+        }
+    }
 }

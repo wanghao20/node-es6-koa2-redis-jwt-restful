@@ -15,58 +15,58 @@ export default class WeChatController {
 	/**
 	 * 逻辑处理service类
 	 */
-        private readonly service: WeChatService;
+    private readonly service: WeChatService;
 
-	constructor() {
-		this.service = new WeChatService();
-	}
+    constructor() {
+        this.service = new WeChatService();
+    }
 
 	/**
 	 * 授权
 	 * @param ctx koa中间件
 	 */
-	@get("/oauth")
-	public async oauth(ctx: Context) {
-		const state = await this.service.oauth(ctx);
+    @get("/oauth")
+    public async oauth(ctx: Context) {
+        const state = await this.service.oauth(ctx);
 
-		return (ctx.body = ReturnResult.successData(state));
-	}
+        return (ctx.body = ReturnResult.successData(state));
+    }
 
 	/**
 	 * 获取openid
 	 * @param ctx koa中间件
 	 */
-	@get("/token")
-	public async token(ctx: Context) {
-		// Validate.isId(ctx.request.query.code);
-		const state = await this.service.token(ctx.request.query.code);
+    @get("/token")
+    public async token(ctx: Context) {
+        // Validate.isId(ctx.request.query.code);
+        const state = await this.service.token(ctx.request.query.code);
 
-		return (ctx.body = ReturnResult.successData(state));
-	}
+        return (ctx.body = ReturnResult.successData(state));
+    }
 	/**
 	 * (企业转账)支付
 	 * @param ctx koa中间件
 	 */
-	@post("/transfers")
-	public async transfers(ctx: Context) {
-		// Validate.isId(ctx.request.body.openid);
-		// Validate.isNumber(ctx.request.body.amount);
-		const enAccountTransfer: EnAccountTransfer = ctx.request.body;
-                const data =  await this.service.transfers(enAccountTransfer);
+    @post("/transfers")
+    public async transfers(ctx: Context) {
+        // Validate.isId(ctx.request.body.openid);
+        // Validate.isNumber(ctx.request.body.amount);
+        const enAccountTransfer: EnAccountTransfer = ctx.request.body;
+        const data = await this.service.transfers(enAccountTransfer);
 
-                return (ctx.body = ReturnResult.successData(data));
-        }
-        /**
-	 * (企业红包)支付
-	 * @param ctx koa中间件
-	 */
-	@post("/sendredpack")
-	public async sendredpack(ctx: Context) {
-		// Validate.isId(ctx.request.body.openid);
-		// Validate.isNumber(ctx.request.body.amount);
-		const senDredPack: SenDredPack = ctx.request.body;
-                const data =  await this.service.sendredpack(senDredPack);
+        return (ctx.body = ReturnResult.successData(data));
+    }
+    /**
+     * (企业红包)支付
+     * @param ctx koa中间件
+     */
+    @post("/sendredpack")
+    public async sendredpack(ctx: Context) {
+        // Validate.isId(ctx.request.body.openid);
+        // Validate.isNumber(ctx.request.body.amount);
+        const senDredPack: SenDredPack = ctx.request.body;
+        const data = await this.service.sendredpack(senDredPack);
 
-                return (ctx.body = ReturnResult.successData(data));
-	}
+        return (ctx.body = ReturnResult.successData(data));
+    }
 }
