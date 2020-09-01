@@ -5,7 +5,8 @@
 	"main": "",
 	"scripts": {
 		"start": "ts-node server.ts",
-		"pm": "pm2 start pm2.conf.json"
+		"pm": "pm2 start pm2.conf.json",
+		"watch-server": "tsc && nodemon -e ts,tsx --exec ts-node ./server.ts"
 	},
 	"keywords": [
 		"koa",
@@ -27,15 +28,15 @@
 		"@types/uuid": "^8.3.0",
 		"koa": "^2.13.0",
 		"koa2-cors": "^2.0.6",
+		"nodemon": "^2.0.4",
 		"ts-node": "^8.10.2",
-		"typescript": "^3.9.5"
+		"typescript": "^3.9.7"
 	},
 	"dependencies": {
 		"@hapi/joi": "^17.1.1",
 		"@koa/cors": "^3.1.0",
 		"@koa/router": "^9.3.1",
 		"@types/hapi__joi": "^17.1.4",
-		"@types/koa-xml-body": "^2.0.1",
 		"@types/koa__cors": "^3.0.1",
 		"@types/koa__router": "^8.0.2",
 		"@types/node-rsa": "^1.0.0",
@@ -52,7 +53,6 @@
 		"koa-ratelimit": "^4.2.1",
 		"koa-route-decors": "^1.0.5",
 		"koa-router": "^9.1.0",
-		"koa-xml-body": "^2.2.0",
 		"koa2-cors": "^2.0.6",
 		"log4js": "^6.3.0",
 		"moment": "^2.27.0",

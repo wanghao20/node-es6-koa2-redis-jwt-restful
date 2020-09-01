@@ -1,9 +1,10 @@
 import Joi = require("@hapi/joi");
 
+import { isUndefined } from "util";
+
 import { StaticStr } from "../config/StaticStr";
 
 import { VerifyException } from "./Exceptions";
-import { isUndefined } from "util";
 /**
  * Created by wh on 2020/7/18
  * author: wanghao
@@ -70,9 +71,9 @@ export class Validate {
     }
 
     /**
- * 灵活判断字符类型?参数
- * @param val any
- */
+    * 灵活判断字符类型?参数
+    * @param val any
+    */
     public static isFlexValid(val: string) {
         // 判断对象是否存在如果存在判断数据大小
         if (isUndefined(val) || val === "") {

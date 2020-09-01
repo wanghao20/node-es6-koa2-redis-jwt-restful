@@ -1,7 +1,11 @@
 import { Context } from "koa";
 
+import { verify } from "jsonwebtoken";
+
 import { BaseConfig } from "../config/Base";
+import { JWT_SECRET } from "../config/Constants";
 import { StaticStr } from "../config/StaticStr";
+import { TbLog } from "../format/Type";
 
 import { BullMQ } from "./BullMQ";
 import { logError } from "./Logger";
@@ -25,14 +29,11 @@ export class Filter {
 	 */
     public reqfilter() {
         return async (ctx: Context, next: () => Promise<void>) => {
-            // 跨域请求设置
-            ctx.res.setHeader("Access-Control-Allow-Origin", "*");
-            ctx.res.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT,DELETE");
-            ctx.res.setHeader("Access-Control-Allow-Headers", "Content-Type,Accept,Authentication");
-            ctx.res.setHeader("Content-Type", "application/json; charset=utf-8");
-            if (ctx.req.method === "OPTIONS") {
-                return (ctx.body = ReturnResult.successData());
-            }
+            // 参数设置
+            ctx.params = {
+                ...ctx.request.body,
+                ...ctx.query
+            };
             try {
                 let url = ctx.originalUrl.substring(0, ctx.originalUrl.indexOf("?"));
                 if (url === "") {
@@ -42,8 +43,7 @@ export class Filter {
                     // 白名单接口直接通过
                     await next();
                 } else {
-                    // const decodedToken:any  = verify(ctx.headers.authentication, JWT_SECRET);
-                    const decodedToken: any = { "id": "A" };
+                    const decodedToken: any = verify(ctx.headers.authentication, JWT_SECRET);
                     // 解析token保存到中间
                     ctx.user = decodedToken.data; // 这里的key = 'user'
                     await next();
@@ -55,8 +55,9 @@ export class Filter {
             }
 
             // 判断404
-            if (ctx.status === 404) {
-                ctx.status = 404;
+            if (ctx.status === 404 || ctx.status === 405) {
+                // 设置浏览器状态码
+                ctx.status = 200;
 
                 return (ctx.body = ReturnResult.errorMsg("未找到当前路径", 404));
             }
@@ -71,18 +72,21 @@ export class Filter {
     public async catchError(ctx: Context, error: any) {
         // 判断是否是参数错误
         if (error.msg) {
-            ctx.status = StaticStr.ERR_CODE_DEFAULT;
+            // 设置浏览器状态码
+            ctx.status = 200;
 
             return (ctx.body = ReturnResult.errorMsg(error.msg, StaticStr.ERR_CODE_DEFAULT));
         } else if (error.message === "invalid token" || error.message === "jwt must be provided" || error.message === "jwt expired") {
+            // 设置浏览器状态码
+            ctx.status = 200;
             // token验证错误
-            ctx.status = 401;
 
             return (ctx.body = ReturnResult.errorMsg("当前token失效", 401));
         } else {
             // 系统错误
             logError(error.message, ctx.ip);
-            ctx.status = 500;
+            // 设置浏览器状态码
+            ctx.status = 200;
 
             return (ctx.body = ReturnResult.errorMsg("服务器错误", 500));
         }
@@ -94,14 +98,16 @@ export class Filter {
     public operateLog(ctx: Context) {
         // 记录日志
         // 过滤日志白名单
-        // if (BaseConfig.NO_LOG_URL.indexOf(ctx.routerPath) === -1) {
-        // 	// 添加到队列中处理
-        // 	const tbLog: TbLog = {};
-        // 	tbLog.userId = ctx.user.id;
-        // 	tbLog.operationUrl = ctx.operationUrl;
-        // 	tbLog.operationType = ctx.request.method;
-        // 	this.bull.saveObj(tbLog, "tbLog");
-        // }
+        if (BaseConfig.NO_LOG_URL.indexOf(ctx.routerPath) === -1) {
+            // 添加到队列中处理
+            const remoteAddress = ctx.headers["x-forwarded-for"] || ctx.ip || ctx.ips || (ctx.socket && ctx.socket.remoteAddress);
+            const tbLog: TbLog = {};
+            tbLog.userId = ctx.user.id;
+            tbLog.operationUrl = ctx.operationUrl||ctx.originalUrl;
+            tbLog.operationType = ctx.request.method;
+            tbLog.ip = remoteAddress;
+            this.bull.saveObj(tbLog, "tbLog");
+        }
         // 记录用户活跃统计
         // 暂时写在这里
         // const start2 = Date.now();

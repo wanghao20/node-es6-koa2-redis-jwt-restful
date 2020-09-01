@@ -5,9 +5,9 @@ import { ConnectionOptions } from "typeorm";
  * @desc：数据库配置文件(utils>database文件内切换程序数据库)
  */
 export const mysqlConfig: ConnectionOptions = {
-    "name": "mysql",
+    "name": "default",
     "type": "mysql",
-    "host": "0.0.0.0",
+    "host": "148.70.34.67",
     "port": 3307,
     "username": "root",
     "password": "123456",
@@ -16,7 +16,7 @@ export const mysqlConfig: ConnectionOptions = {
     // synchronize: true,
     "timezone": "+08:00",
     "dateStrings": true,
-    "entities": ["src/entity/mysql/*.ts"],
+    "entities": ["src/entity/mysql/*/*.ts"],
 };
 export const mongodbConfig: ConnectionOptions = {
     "name": "mongodb",

@@ -12,7 +12,8 @@ export class MysqlDatabase {
 	 * 获取数据库连接
 	 */
     public static getConnection() {
-        return getConnection("mysql");
+        // return getConnection("mysql");
+        return getConnection();
     }
     // todo 自定义的方法使用redis分布式锁或者在数据库中开启事务
     // todo typeorm中增删改都自动添加了事务机制
@@ -29,7 +30,7 @@ export class MysqlDatabase {
     public static async executeProc(sqlCommand: string, parameters?: any) {
         const data = await getConnection().query(sqlCommand, parameters);
 
-        return data[0];
+        return data;
     }
 }
 

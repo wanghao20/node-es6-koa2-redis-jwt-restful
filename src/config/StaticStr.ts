@@ -7,7 +7,7 @@ export class StaticStr {
 	/**
 	 * 默认参数错误状态码
 	 */
-    public static ERR_CODE_DEFAULT = 302;
+    public static ERR_CODE_DEFAULT = 403;
 	/**
 	 * 默认错误提示字符
 	 */

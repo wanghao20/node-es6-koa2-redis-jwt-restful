@@ -7,24 +7,21 @@ import Koa = require("koa");
 
 import bodyParser = require("koa-bodyparser");
 
-import xmlParser = require("koa-xml-body");
-
 import { CronJob } from "cron";
 
 import "reflect-metadata";
 
-import { createConnections } from "typeorm";
+import { createConnection } from "typeorm";
 
 import { Context } from "koa";
 
 import { BaseConfig } from "./config/Base";
-import { mysqlConfig, mongodbConfig } from "./config/Environments";
+import { mysqlConfig } from "./config/Environments";
 import { getLimiterConfig } from "./config/LimiterConfig";
-import { MongoDbLogger } from "./dataBase/MongoDatabase";
 import { MysqlDbLogger } from "./dataBase/MysqlDatabase";
 import { addRouter } from "./routes/Routes";
 import { logError, logHttp } from "./utils/Logger";
-import { redisDb1, limiterRedis } from "./utils/RedisTool";
+import { limiterRedis } from "./utils/RedisTool";
 import { Filter } from "./utils/Reqfilter";
 import { TimedTask } from "./utils/TimedTask";
 const ratelimit = require("koa-ratelimit");
@@ -84,21 +81,11 @@ export class App {
 	 */
     private async init() {
         // 解决微信支付通知回调数据
-        this.app.use(
-            xmlParser({
-                "limit": 128, // 最大值默认1mb
-                "encoding": "utf8", // lib将从`content-type`中检测到它
-                "xmlOptions": {
-                    "normalize": true, // 在文本节点内修剪空格
-                    "normalizeTags": true, // 将标签转换为小写
-                    "explicitArray": false, // 如果> 1，则仅将节点放入数组
-                },
-                // "key": "xmlBody", // lib将检查ctx.request.xmlBody并将解析的数据设置为它。
-                "onerror": (err, ctx) => {
-                    logError("xmlParser 解析 error:" + err);
-                },
-            })
-        );
+        // this.app.use(
+        //     xmlParser()
+        // );
+        // koa(这个放第一个,要不然跨域会无效)
+        this.app.use(cors());
         // 解析json格式
         this.app.use(bodyParser());
         // http请求次数限制(当前使用ip可切换为用户id)
@@ -107,8 +94,6 @@ export class App {
         this.app.use(logHttp());
         // 接收到数据过滤无效请求
         this.app.use(this.filter.reqfilter());
-        // koa
-        this.app.use(cors());
         // add route
         addRouter(this.router);
         this.app.use(this.router.routes()).use(this.router.allowedMethods());
@@ -120,11 +105,13 @@ export class App {
     public start() {
         // 接管数据库logger
         Object.assign(mysqlConfig, { "logger": new MysqlDbLogger() });
-        Object.assign(mongodbConfig, { "logger": new MongoDbLogger() });
+        // Object.assign(mongodbConfig, { "logger": new MongoDbLogger() });
         // 数据库连接列表
-        const cxn = [mysqlConfig, mongodbConfig];
+        // const cxn = [mysqlConfig, mongodbConfig];
+        // createConnections(cxn)
+        const cxn = mysqlConfig;
         // 创建数据库连接
-        createConnections(cxn)
+        createConnection(cxn)
             .then(async (connection) => {
                 console.log("数据库连接成功!");
 

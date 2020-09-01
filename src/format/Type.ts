@@ -61,40 +61,6 @@ type TokenConfig = {
 	 */
     data: {};
 };
-/**
- * attackDate配置类型
- */
-type AttackDate = {
-	/**
-	 * 创建时间
-	 */
-    attackDate: any;
-	/**
-	 * id
-	 */
-    id: any;
-	/**
-	 * 输赢
-	 */
-    winLose: any;
-};
-/**
- *等级贡献记录数据结构
- */
-type DrawReward = {
-	/**
-	 * uid
-	 */
-    uid: string;
-	/**
-	 * 等级
-	 */
-    grade: number;
-	/**
-	 * 奖励
-	 */
-    devote: number;
-};
 
 /**
  *企业号转账后台接收参数
@@ -163,13 +129,17 @@ type TbLogContent = {
  */
 type TbLog = {
 	/**
+	 * id
+	 */
+    id?: string;
+	/**
 	 * 操作用户id
 	 */
     userId?: string;
     /**
      * 操作时间
      */
-    dateCreated?: Date;
+    creationTime?: Date;
     /**
      * 操作类型:查询、新增、删除、更新
      */
@@ -178,6 +148,32 @@ type TbLog = {
 	 * 操作地址
 	 */
     operationUrl?: string;
+	/**
+	 * 操作ip
+	 */
+    ip?: string;
+};
+/**
+ *分页数据
+ */
+type Paging = {
+	/**
+	 * 当前页面
+	 */
+    page: number;
+    /**
+     * 分页大小
+     */
+    limit: number;
+    /**
+     * 过滤条件
+     */
+    name: string;
+    /**
+     * roles
+     */
+    roles: string;
+
 };
 /**
  *企业号转账POST请求发出参数
@@ -278,4 +274,4 @@ type RedArray = {
     scene_id?: string;
 };
 
-export { RedArray, SenDredPack, ResData, RouteMeta, TokenConfig, AttackDate, DrawReward, EnAccountTransfer, PreArray, AgentOptionsTy, TbLogContent, TbLog };
+export { Paging, RedArray, SenDredPack, ResData, RouteMeta, TokenConfig, EnAccountTransfer, PreArray, AgentOptionsTy, TbLogContent, TbLog };

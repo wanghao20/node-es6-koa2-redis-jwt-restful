@@ -39,7 +39,7 @@ export default class WeChatController {
     @get("/token")
     public async token(ctx: Context) {
         // Validate.isId(ctx.request.query.code);
-        const state = await this.service.token(ctx.request.query.code);
+        const state = await this.service.token(ctx.params.code);
 
         return (ctx.body = ReturnResult.successData(state));
     }
@@ -51,7 +51,7 @@ export default class WeChatController {
     public async transfers(ctx: Context) {
         // Validate.isId(ctx.request.body.openid);
         // Validate.isNumber(ctx.request.body.amount);
-        const enAccountTransfer: EnAccountTransfer = ctx.request.body;
+        const enAccountTransfer: EnAccountTransfer = ctx.params;
         const data = await this.service.transfers(enAccountTransfer);
 
         return (ctx.body = ReturnResult.successData(data));
@@ -64,7 +64,7 @@ export default class WeChatController {
     public async sendredpack(ctx: Context) {
         // Validate.isId(ctx.request.body.openid);
         // Validate.isNumber(ctx.request.body.amount);
-        const senDredPack: SenDredPack = ctx.request.body;
+        const senDredPack: SenDredPack = ctx.params;
         const data = await this.service.sendredpack(senDredPack);
 
         return (ctx.body = ReturnResult.successData(data));

@@ -4,9 +4,12 @@ import Bull = require("bull");
 
 import { v4 as uuidv4 } from "uuid";
 
+import { getRepository } from "typeorm";
+
 import { bullConfig, QUEUE_USER_ACTIVE, QUEUE_OBJ_NAME } from "../config/BullConfig";
-import { CltLog } from "../entity/mysql/CleLog";
-import { TpLog } from "../entity/mysql/TpLog";
+import { TbLog } from "../format/Type";
+import { BaseTpLog } from "../entity/mysql/log/BaseTpLog";
+import { CltLog } from "../entity/mysql/log/CleLog";
 
 import { DateFormat } from "./DateFormat";
 import { redisDb1 } from "./RedisTool";
@@ -72,17 +75,18 @@ export class BullMQ {
     public async objImpl(obj: any) {
         // 玩家操作日志
         if (obj.data.objName === "tbLog") {
-            const tbLogObj = obj.data.tbLog;
+            const tbLogObj :TbLog = obj.data.tbLog;
             const type: any = { "GET": "查询", "POST": "新增", "PUT": "更新", "DELETE": "删除" };
-            const tbLog: TpLog = {
+            const tbLog: BaseTpLog = {
                 "id": uuidv4(),
                 "userId": tbLogObj.userId, // 操作用户id
-                "dateCreated": DateFormat.dateFormat(Date.now()), // 操作时间
+                "creationTime": new Date(), // 操作时间
                 "operationType": type[tbLogObj.operationType], // 查询、新增、删除、更新
-                "operationUrl": tbLogObj.originalUrl, // 操作地址
+                "operationUrl": tbLogObj.operationUrl, // 操作地址
+                "ip": tbLogObj.ip, // 操作ip
             };
-            // const tpLogDao = getRepository(TpLog);
-            // await tpLogDao.save(tbLog);
+            const tpLogDao = getRepository(BaseTpLog);
+            await tpLogDao.save(tbLog);
         }
         // 客户端操作日志
         if (obj.data.objName === "cltParam") {

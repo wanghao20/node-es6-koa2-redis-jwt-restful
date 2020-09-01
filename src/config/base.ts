@@ -25,7 +25,7 @@ export class BaseConfig {
 	/**
 	 * redis db配置(项目使用)
 	 */
-    public static SYSTEM_DB = 3;
+    public static SYSTEM_DB = 1;
 	/**
 	 * redis db配置(MQ使用)
 	 */

@@ -87,10 +87,12 @@ export function logHttp() {
         await next();
         const ms = Date.now() - start;
         // 不同类型记录
-        if (ctx.status === 200) { getLogger("http").info(`${ctx.method} ${ctx.url} ${ctx.status} ${remoteAddress}- ${ms}ms`); }
-        else if (ctx.status === 500) {
-            getLogger("http").error(`${ctx.method} ${ctx.url} ${ctx.status} ${remoteAddress}- ${ms}ms`);
-        } else { getLogger("http").warn(`${ctx.method} ${ctx.url} ${ctx.status} ${remoteAddress}- ${ms}ms`); }
+        if (ctx.body.code === 200) { getLogger("http").info(`${ctx.method} ${ctx.url} ${ctx.body.code} ${remoteAddress}- ${ms}ms`); }
+        else if (ctx.body.code === 500) {
+            getLogger("http").error(`${ctx.method} ${ctx.url} ${ctx.body.code} ${remoteAddress}- ${ms}ms`);
+        } else {
+            getLogger("http").warn(`${ctx.method} ${ctx.url} ${ctx.body.code} ${remoteAddress}- ${ms}ms`);
+        }
     };
 }
 /**
