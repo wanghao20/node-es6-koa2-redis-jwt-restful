@@ -29,15 +29,25 @@ export class BaseUser {
     @Column()
     public password: string;
     /**
+     * 密码
+     */
+    @Column()
+    public email: string;
+    /**
      * creationTime
      */
     @Column()
     public creationTime: string;
     /**
+     * updateTime
+     */
+    @Column()
+    public updateTime: string;
+    /**
      * 是否删除,0:否1:是
      */
     @Column()
-    public isDelete: string;
+    public isDelete: number;
     /**
      * 头像
      */

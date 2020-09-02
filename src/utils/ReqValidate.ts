@@ -25,7 +25,19 @@ export class Validate {
             throw new VerifyException(StaticStr.ERR_MSG_VERIFY_DEFAULT, StaticStr.ERR_CODE_DEFAULT);
         }
     }
-
+	/**
+	 * 判断参数isEmail
+	 * @param val 需要验证的字符
+	 */
+    public static isEmail(val: string) {
+        const schema = Joi.object({
+            "str": Joi.string().email().required(),
+        });
+        const { error, value } = schema.validate({ "str": val });
+        if (error) {
+            throw new VerifyException(StaticStr.ERR_EMAIL_CODE, StaticStr.ERR_CODE_DEFAULT);
+        }
+    }
 	/**
 	 * 判断参数是否是指定对象
 	 * @param val 传入判断的对象
@@ -80,7 +92,7 @@ export class Validate {
             return true;
         }
         const schema = Joi.object({
-            "str": Joi.string().min(0).max(20).required(),
+            "str": Joi.string().min(1).max(20).required(),
         });
         const { error, value } = schema.validate({ "str": val });
         if (error) {
@@ -101,7 +113,21 @@ export class Validate {
         });
         const { error, value } = schema.validate({ "str1": name, "str2": pwd });
         if (error) {
-            throw new VerifyException("参数验证未成功", StaticStr.ERR_CODE_DEFAULT);
+            throw new VerifyException("用户名或者密码格式验证未成功!", StaticStr.ERR_CODE_DEFAULT);
         }
+    }
+
+    /**
+     * 验证用户操作是否有足够的权限
+     * @param roleId 权限id
+     * @param moduleURL 模块地址
+     */
+    public static async verifyAuth(roleId: string,moduleURL:string) {
+        // TODO 权限模块构建好以后验证对应权限id和对应模块
+        if (false) {
+            throw new VerifyException("没有请求权限", StaticStr.ERR_CODE_DEFAULT);
+        }
+
+        return true;
     }
 }

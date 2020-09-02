@@ -33,11 +33,24 @@ export class BaseConfig {
 	/**
          * token验证白名单Url
 	 */
-    public static OPEN_URL = ["/auth/login", "/auth/register", "/wechat/oauth", "/favicon.ico"];
+    public static OPEN_URL = [
+        "/auth/login",
+        "/auth/insert",
+        "/auth/captchaCode",
+        "/auth/getEmailCode",
+        "/auth/validEmailCode",
+        "/wechat/oauth",
+        "/favicon.ico",
+    ];
 	/**
          * 不记录日志Url
 	 */
-    public static NO_LOG_URL = ["/app/system/tbLog", "/app/system/cltLog"];
+    public static NO_LOG_URL = [
+        "/app/system/tbLog",
+        "/app/system/cltLog",
+        "/auth/captchaCode",
+        "/auth/logout",
+    ];
 
     /**
      * 设置非活跃玩家判定时间(天数)

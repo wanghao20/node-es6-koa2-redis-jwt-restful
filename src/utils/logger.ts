@@ -87,9 +87,12 @@ export function logHttp() {
         await next();
         const ms = Date.now() - start;
         // 不同类型记录
-        if (ctx.body.code === 200) { getLogger("http").info(`${ctx.method} ${ctx.url} ${ctx.body.code} ${remoteAddress}- ${ms}ms`); }
-        else if (ctx.body.code === 500) {
+        if (ctx.body.code === 200) {
+            getLogger("http").info(`${ctx.method} ${ctx.url} ${ctx.body.code} ${remoteAddress}- ${ms}ms`);
+        } else if (ctx.body.code === 500) {
             getLogger("http").error(`${ctx.method} ${ctx.url} ${ctx.body.code} ${remoteAddress}- ${ms}ms`);
+        } else if (ctx.url.indexOf("/auth/captchaCode") !== -1) {
+            getLogger("http").info(`${ctx.method} ${ctx.url} ${200} ${remoteAddress}- ${ms}ms`);
         } else {
             getLogger("http").warn(`${ctx.method} ${ctx.url} ${ctx.body.code} ${remoteAddress}- ${ms}ms`);
         }

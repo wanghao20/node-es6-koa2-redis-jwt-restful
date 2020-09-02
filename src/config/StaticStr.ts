@@ -8,6 +8,22 @@ export class StaticStr {
 	 * 默认参数错误状态码
 	 */
     public static ERR_CODE_DEFAULT = 403;
+    /**
+	 * 验证码错误
+	 */
+    public static ERR_CAPTCHA_CODE= "验证码错误!请点击验证码重新获取!";
+    /**
+	 * 邮箱错误
+	 */
+    public static ERR_EMAIL_CODE= "邮箱格式错误!";
+    /**
+	 * 邮箱错误
+	 */
+    public static ERR_EMAILCO_CODE= "邮箱已经被使用!";
+    /**
+	 * 邮箱错误
+	 */
+    public static ERR_EMAILCO2_CODE= "请输入正确邮箱地址!";
 	/**
 	 * 默认错误提示字符
 	 */
@@ -15,7 +31,7 @@ export class StaticStr {
 	/**
 	 * 后台接收参数验证错误默认提示文字
 	 */
-    public static ERR_MSG_VERIFY_DEFAULT = "查询参数错误";
+    public static ERR_MSG_VERIFY_DEFAULT = "参数错误";
 	/**
 	 * 不检查name
 	 */

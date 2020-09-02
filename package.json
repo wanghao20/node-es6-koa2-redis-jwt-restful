@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "ts-node server.ts",
 		"pm": "pm2 start pm2.conf.json",
-		"watch-server": "tsc && nodemon -e ts,tsx --exec ts-node ./server.ts"
+		"serve": "tsc && nodemon -e ts,tsx --exec ts-node ./server.ts"
 	},
 	"keywords": [
 		"koa",
@@ -23,6 +23,7 @@
 		"@types/koa": "^2.11.3",
 		"@types/koa-bodyparser": "^4.3.0",
 		"@types/node": "^14.0.27",
+		"@types/nodemailer": "^6.4.0",
 		"@types/redlock": "^4.0.1",
 		"@types/request": "^2.48.5",
 		"@types/uuid": "^8.3.0",
@@ -60,11 +61,13 @@
 		"mysql": "^2.18.1",
 		"node-jsencrypt": "^1.0.0",
 		"node-rsa": "^1.1.1",
+		"nodemailer": "^6.4.11",
 		"redis": "^3.0.2",
 		"redis-typescript": "^0.1.2",
 		"redlock": "^4.1.0",
 		"reflect-metadata": "^0.1.13",
 		"request": "^2.88.2",
+		"svg-captcha": "^1.4.0",
 		"typeorm": "^0.2.25",
 		"uuid": "^8.2.0",
 		"wechat-oauth": "^1.5.0"

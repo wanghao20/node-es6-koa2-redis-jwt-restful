@@ -48,7 +48,7 @@ export class Filter {
                     ctx.user = decodedToken.data; // 这里的key = 'user'
                     await next();
                     // 保存用户操作日志
-                    this.operateLog(ctx);
+                    // this.operateLog(ctx);
                 }
             } catch (error) {
                 this.catchError(ctx, error);

@@ -24,9 +24,9 @@ export class WeChatTool {
 	 * @param appid appid
 	 */
     public async getAppInfo(appid: string) {
-        const appinfo = await this.getAppInfoSetting(appid);
+        // const appinfo = await this.getAppInfoSetting(appid);
 
-        return appinfo;
+        return {};
     }
 	/**
 	 * 生成引导用户点击的URL。
@@ -42,20 +42,20 @@ export class WeChatTool {
 	/**
 	 *  根据不同的AppCode获取对应的Id和Key
 	 */
-    public async getAppInfoSetting(appid: string) {
-        /// 如果没有code则返回默认的app设置信息
-        /// 如果配置文件中没有多小程序配置节，返回默认的
-        /// 或者多配置中没有配置对应的appcode
-        if (appid == null) {
-            return null;
-        }
-        /// 先查看redis缓存中是否有该appid的相关信息
-        const appInfo = redisDb1.hgetall(KeyName.HASH_OBJ_APPINFO(appid));
-        if (appInfo) {
-            return appInfo;
-        }
-        /// 从数据库里面拿
-    }
+    // public async getAppInfoSetting(appid: string) {
+    //     /// 如果没有code则返回默认的app设置信息
+    //     /// 如果配置文件中没有多小程序配置节，返回默认的
+    //     /// 或者多配置中没有配置对应的appcode
+    //     if (appid == null) {
+    //         return null;
+    //     }
+    //     /// 先查看redis缓存中是否有该appid的相关信息
+    //     const appInfo = redisDb1.hgetall(KeyName.HASH_OBJ_APPINFO(appid));
+    //     if (appInfo) {
+    //         return appInfo;
+    //     }
+    //     /// 从数据库里面拿
+    // }
 
 	/**
 	 * 取得微信端返回来的xml标签里的value

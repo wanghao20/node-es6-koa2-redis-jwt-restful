@@ -204,17 +204,11 @@ class RedisTool implements redisTool {
     public async setString(key: string, value: any) {
         const val: string = typeof value !== "string" ? JSON.stringify(value) : value;
         try {
-            const lock = await this.lock(key);
-            if (lock) {
+
                 const res = await this.redis.set(key, val);
                 // 处理完成后解锁
-                redisDb1.unlockLock(lock);
 
                 return res;
-            } else {
-                // 其他线程在处理中
-                console.log("其他线程在处理中");
-            }
         } catch (e) {
             // tslint:disable-next-line:no-console
             console.error(e);
