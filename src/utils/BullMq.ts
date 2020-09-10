@@ -75,14 +75,14 @@ export class BullMQ {
     public async objImpl(obj: any) {
         // 玩家操作日志
         if (obj.data.objName === "tbLog") {
-            const tbLogObj :TbLog = obj.data.tbLog;
+            const tbLogObj: TbLog = obj.data.tbLog;
             const type: any = { "GET": "查询", "POST": "新增", "PUT": "更新", "DELETE": "删除" };
             const tbLog: BaseTpLog = {
-                "id": uuidv4(),
                 "userId": tbLogObj.userId, // 操作用户id
-                "creationTime": new Date(), // 操作时间
+                "username": tbLogObj.username, // 操作账户
+                "createdTime": DateFormat.dateFormat(Date.now()), // 操作时间
                 "operationType": type[tbLogObj.operationType], // 查询、新增、删除、更新
-                "operationUrl": tbLogObj.operationUrl, // 操作地址
+                "operationMod": tbLogObj.operationMod, // 操作地址
                 "ip": tbLogObj.ip, // 操作ip
             };
             const tpLogDao = getRepository(BaseTpLog);
@@ -90,8 +90,7 @@ export class BullMQ {
         }
         // 客户端操作日志
         if (obj.data.objName === "cltParam") {
-            const cltParam: CltLog = obj.data.cltParam;
-            cltParam.id = uuidv4();
+            // const cltParam: CltLog = obj.data.cltParam;
             // const cltLogDao = getRepository(CltLog);
             // cltLogDao.save(cltParam);
         }

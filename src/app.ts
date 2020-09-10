@@ -5,8 +5,6 @@ import Router = require("@koa/router");
 
 import Koa = require("koa");
 
-import bodyParser = require("koa-bodyparser");
-
 import { CronJob } from "cron";
 
 import "reflect-metadata";
@@ -25,6 +23,8 @@ import { limiterRedis } from "./utils/RedisTool";
 import { Filter } from "./utils/Reqfilter";
 import { TimedTask } from "./utils/TimedTask";
 const ratelimit = require("koa-ratelimit");
+const koaBody = require("koa-body");
+
 /**
  * Created by wh on 2020/7/15
  * author: wanghao
@@ -86,8 +86,14 @@ export class App {
         // );
         // koa(这个放第一个,要不然跨域会无效)
         this.app.use(cors());
-        // 解析json格式
-        this.app.use(bodyParser());
+
+        // 接收文件上传
+        this.app.use(koaBody({
+            "multipart": true,
+            "formidable": {
+                "maxFileSize": 200 * 1024 * 1024	// 设置上传文件大小最大限制，默认2M
+            }
+        }));
         // http请求次数限制(当前使用ip可切换为用户id)
         this.app.use(ratelimit((getLimiterConfig((ctx: Context) => ctx.ip, limiterRedis))));
         // http请求记录

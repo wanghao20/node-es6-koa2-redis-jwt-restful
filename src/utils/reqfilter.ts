@@ -2,6 +2,10 @@ import { Context } from "koa";
 
 import { verify } from "jsonwebtoken";
 
+import path = require("path");
+
+import fs = require("fs");
+
 import { BaseConfig } from "../config/Base";
 import { JWT_SECRET } from "../config/Constants";
 import { StaticStr } from "../config/StaticStr";
@@ -39,7 +43,10 @@ export class Filter {
                 if (url === "") {
                     url = ctx.originalUrl;
                 }
-                if (BaseConfig.OPEN_URL.indexOf(url) !== -1) {
+                if (url.indexOf(BaseConfig.OPEN_FILE_URL) !== -1) {
+                    // 文件查看
+                    await next();
+                } else if (BaseConfig.OPEN_URL.indexOf(url) !== -1) {
                     // 白名单接口直接通过
                     await next();
                 } else {
@@ -48,7 +55,7 @@ export class Filter {
                     ctx.user = decodedToken.data; // 这里的key = 'user'
                     await next();
                     // 保存用户操作日志
-                    // this.operateLog(ctx);
+                    this.operateLog(ctx);
                 }
             } catch (error) {
                 this.catchError(ctx, error);
@@ -98,25 +105,22 @@ export class Filter {
     public operateLog(ctx: Context) {
         // 记录日志
         // 过滤日志白名单
-        if (BaseConfig.NO_LOG_URL.indexOf(ctx.routerPath) === -1) {
+        if (BaseConfig.LOG_URL[ctx.routerPath] !== undefined) {
             // 添加到队列中处理
             const remoteAddress = ctx.headers["x-forwarded-for"] || ctx.ip || ctx.ips || (ctx.socket && ctx.socket.remoteAddress);
             const tbLog: TbLog = {};
             tbLog.userId = ctx.user.id;
-            tbLog.operationUrl = ctx.operationUrl||ctx.originalUrl;
+            tbLog.username = ctx.user.name;
+            tbLog.operationMod = ctx.operationUrl || ctx.originalUrl;
             tbLog.operationType = ctx.request.method;
             tbLog.ip = remoteAddress;
+            // 截取url
+            if (tbLog.operationMod.indexOf("?") !== -1) {
+                tbLog.operationMod = tbLog.operationMod.split("?")[0];
+            }
+            tbLog.operationMod = BaseConfig.LOG_URL[tbLog.operationMod];
             this.bull.saveObj(tbLog, "tbLog");
         }
-        // 记录用户活跃统计
-        // 暂时写在这里
-        // const start2 = Date.now();
-        // for(let i=0;i<100000;i++){
-        // this.bull.saveActive("123456");
-        // }
-        // const ms2 = Date.now() - start2;
-
-        // console.log("");
 
     }
 }

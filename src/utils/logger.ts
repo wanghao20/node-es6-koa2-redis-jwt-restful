@@ -3,6 +3,7 @@ import { Context } from "koa";
 import { configure, getLogger } from "log4js";
 
 import { resolve } from "path";
+import { BaseConfig } from "../config/Base";
 const logPath = resolve(__dirname, "../../logs"); // log存放路径，确保该路径存在
 /**
  * Created by wh on 2020/7/15
@@ -91,7 +92,9 @@ export function logHttp() {
             getLogger("http").info(`${ctx.method} ${ctx.url} ${ctx.body.code} ${remoteAddress}- ${ms}ms`);
         } else if (ctx.body.code === 500) {
             getLogger("http").error(`${ctx.method} ${ctx.url} ${ctx.body.code} ${remoteAddress}- ${ms}ms`);
-        } else if (ctx.url.indexOf("/auth/captchaCode") !== -1) {
+        } else if (ctx.url.indexOf(BaseConfig.OPEN_LOG_URL) !== -1) {
+            getLogger("http").info(`${ctx.method} ${ctx.url} ${200} ${remoteAddress}- ${ms}ms`);
+        } else if (ctx.url.indexOf(BaseConfig.OPEN_LOG_URL1) !== -1) {
             getLogger("http").info(`${ctx.method} ${ctx.url} ${200} ${remoteAddress}- ${ms}ms`);
         } else {
             getLogger("http").warn(`${ctx.method} ${ctx.url} ${ctx.body.code} ${remoteAddress}- ${ms}ms`);

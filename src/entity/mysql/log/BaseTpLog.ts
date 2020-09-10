@@ -10,17 +10,22 @@ export class BaseTpLog {
 	 * id
 	 */
     @PrimaryColumn()
-    public id: string;
+    public id?: string;
     /**
      * 操作用户id
      */
     @Column()
     public userId: string;
     /**
+     * 操作用户name
+     */
+    @Column()
+    public username: string;
+    /**
      * 操作时间
      */
     @Column()
-    public creationTime: Date;
+    public createdTime: string;
     /**
      * 查询、新增、删除、更新
      */
@@ -32,8 +37,8 @@ export class BaseTpLog {
     @Column()
     public ip: string;
     /**
-     * 操作URL地址
+     * 操作模块
      */
     @Column()
-    public operationUrl: string;
+    public operationMod: string;
 }

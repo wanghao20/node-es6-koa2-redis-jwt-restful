@@ -41,17 +41,37 @@ export class BaseConfig {
         "/auth/validEmailCode",
         "/wechat/oauth",
         "/favicon.ico",
+        "/common/download"
     ];
+    /**
+     * 文件URL
+     */
+    public static OPEN_FILE_URL = "/common/download";
 	/**
-         * 不记录日志Url
+    * 记录日志Urld对应的记录名称
 	 */
-    public static NO_LOG_URL = [
-        "/app/system/tbLog",
-        "/app/system/cltLog",
-        "/auth/captchaCode",
-        "/auth/logout",
-    ];
-
+    public static LOG_URL:any = {
+        "/auth/user": "用户",
+        "/auth/Mod": "模块",
+        "/auth/role": "角色",
+        "/game/game": "游戏",
+    };
+    /**
+     * 这里处理特殊返回没有状态码的Url地址打印时显示正常
+     */
+    public static OPEN_LOG_URL ="/auth/captchaCode";
+    /**
+     * 1
+     */
+    public static OPEN_LOG_URL1 ="/common/download/";
+    /**
+     * 新注册玩家默认权限id
+     */
+    public static GHOST_DEFAULT_ROLE_ID = "b6363d60-71aa-4489-b784-4effa01dffd2";
+    /**
+     * name
+     */
+    public static GHOST_DEFAULT_ROLE_NAME = "访客";
     /**
      * 设置非活跃玩家判定时间(天数)
      * 玩家超过天数内未登录后清理redis内存数据

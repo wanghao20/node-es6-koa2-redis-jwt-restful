@@ -136,18 +136,22 @@ type TbLog = {
 	 * 操作用户id
 	 */
     userId?: string;
+	/**
+	 * 操作用户
+	 */
+    username?: string;
     /**
      * 操作时间
      */
-    creationTime?: Date;
+    createdTime?: Date;
     /**
      * 操作类型:查询、新增、删除、更新
      */
     operationType?: string;
 	/**
-	 * 操作地址
+	 * 操作模块
 	 */
-    operationUrl?: string;
+    operationMod?: string;
 	/**
 	 * 操作ip
 	 */
@@ -166,13 +170,9 @@ type Paging = {
      */
     limit: number;
     /**
-     * 过滤条件
+     * 过滤条件{}
      */
-    name: string;
-    /**
-     * roles
-     */
-    roles: string;
+    condition: any;
 
 };
 /**
@@ -273,5 +273,21 @@ type RedArray = {
      */
     scene_id?: string;
 };
-
-export { Paging, RedArray, SenDredPack, ResData, RouteMeta, TokenConfig, EnAccountTransfer, PreArray, AgentOptionsTy, TbLogContent, TbLog };
+/**
+ *请求处理返回类型
+ */
+type fileType = {
+	/**
+	 * 路径
+	 */
+    path: string;
+	/**
+	 * 类型
+	 */
+    type?: string;
+	/**
+	 * 大小
+	 */
+    size?: number;
+};
+export { Paging, fileType, RedArray, SenDredPack, ResData, RouteMeta, TokenConfig, EnAccountTransfer, PreArray, AgentOptionsTy, TbLogContent, TbLog };

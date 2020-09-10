@@ -75,23 +75,7 @@ export class StaticStr {
 	 */
     public static ERR_MSG_GD_F = "等级贡献配置不存在";
 	/**
-	 * 领取贡献奖励
-	 */
-    public static ERR_MSG_GD_D = "奖励已领取";
-	/**
-	 * 领取贡献奖励
-	 */
-    public static ERR_MSG_GD_D1 = "玩家等级不足";
-	/**
-	 * 领取贡献奖励
-	 */
-    public static ERR_MSG_GD_D2 = "没有对应奖励";
-	/**
 	 * 查询全局配置Service
 	 */
     public static ERR_MSG_SYS_F = "系统设置不存在";
-	/**
-	 * 参数验证错误参数配置
-	 */
-    public static ERR_MSG_R = "暂时没有可用红包";
 }

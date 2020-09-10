@@ -1,22 +1,19 @@
-import { Entity, ObjectID, ObjectIdColumn, Column, PrimaryColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, Column, } from "typeorm";
 
-import { BaseRole } from "./BaseRole";
+import { BaseEntity } from "../Base.entity";
+
 /**
  * Created by wh on 2020/8/31
  * author: wanghao
  * @desc：用户
  */
 @Entity()
-export class BaseUser {
-	/**
-	 * id
-	 */
-    @PrimaryColumn()
-    public id: string;
+export class BaseUser extends BaseEntity {
+
     /**
      * 对应角色
      */
-    @PrimaryColumn()
+    @Column()
     public roles: string;
     /**
      * 用户名
@@ -29,25 +26,10 @@ export class BaseUser {
     @Column()
     public password: string;
     /**
-     * 密码
+     * 邮箱
      */
     @Column()
     public email: string;
-    /**
-     * creationTime
-     */
-    @Column()
-    public creationTime: string;
-    /**
-     * updateTime
-     */
-    @Column()
-    public updateTime: string;
-    /**
-     * 是否删除,0:否1:是
-     */
-    @Column()
-    public isDelete: number;
     /**
      * 头像
      */
@@ -56,5 +38,6 @@ export class BaseUser {
     /**
      * 权限名称
      */
+    @Column()
     public rolesName: string;
 }

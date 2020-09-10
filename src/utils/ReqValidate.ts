@@ -2,7 +2,10 @@ import Joi = require("@hapi/joi");
 
 import { isUndefined } from "util";
 
+import { getRepository } from "typeorm";
+
 import { StaticStr } from "../config/StaticStr";
+import { BaseRole } from "../entity/mysql/auth/BaseRole";
 
 import { VerifyException } from "./Exceptions";
 /**
@@ -92,7 +95,7 @@ export class Validate {
             return true;
         }
         const schema = Joi.object({
-            "str": Joi.string().min(1).max(20).required(),
+            "str": Joi.string().min(1).max(40).required(),
         });
         const { error, value } = schema.validate({ "str": val });
         if (error) {
@@ -120,14 +123,17 @@ export class Validate {
     /**
      * 验证用户操作是否有足够的权限
      * @param roleId 权限id
-     * @param moduleURL 模块地址
+     * @param moduleURL 模块地址(需要和设置模块里面的地址一样)
      */
-    public static async verifyAuth(roleId: string,moduleURL:string) {
-        // TODO 权限模块构建好以后验证对应权限id和对应模块
-        if (false) {
-            throw new VerifyException("没有请求权限", StaticStr.ERR_CODE_DEFAULT);
+    public static async verifyAuth(roleId: string, moduleURL: string) {
+        const roleDao = getRepository(BaseRole);
+        const data: BaseRole = await roleDao.findOne({ "id": roleId }, { "relations": ["mods"] });
+        for (let i = 0; i < data.mods.length; i++) {
+            if (data.mods[i].modPath === moduleURL) {
+                return true;
+            }
         }
-
-        return true;
+         throw new VerifyException("没有请求权限!", StaticStr.ERR_CODE_DEFAULT);
     }
+
 }
