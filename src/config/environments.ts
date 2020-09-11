@@ -7,7 +7,7 @@ import { ConnectionOptions } from "typeorm";
 export const mysqlConfig: ConnectionOptions = {
     "name": "default",
     "type": "mysql",
-    "host": "148.70.34.67",
+    "host": "0.0.0.0",
     "port": 3307,
     "username": "root",
     "password": "123456",
