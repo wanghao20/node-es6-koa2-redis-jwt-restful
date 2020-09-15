@@ -49,11 +49,11 @@ export class AccountService {
 
         return md5.update(str).digest("hex"); // 把输出编程16进制的格式
     }
-	/**
-	 * 登录验证接口Service
-	 * @param userName 用户名
-	 * @param passWord 密码
-	 */
+    /**
+     * 登录验证接口Service
+     * @param userName 用户名
+     * @param passWord 密码
+     */
     public async verifyPassword(userName: string, passWord: string, captchaCode: string, time: string) {
         // 验证码
         const val = await redisDb1.getString(KeyName.STR_SVGCAPTCHA_TIME + time);
@@ -197,9 +197,14 @@ export class AccountService {
      * @param user User
      */
     public async update(user: BaseUser) {
+        // 验证用户名
+        const userDao = getRepository(BaseUser);
+        const userVname = await userDao.findOne({ "name": user.name, "isDelete": 0 });
+        if (userVname) {
+            throw new VerifyException(StaticStr.INSERT_ERR_MSG, StaticStr.ERR_CODE_DEFAULT);
+        }
         user.updatedTime = DateFormat.dateFormat(Date.now());
         user.password = this.genPassword(user.password);
-        const userDao = getRepository(BaseUser);
         const data: any = await userDao.save(user);
 
         return data;
@@ -301,11 +306,11 @@ export class AccountService {
         await redisDb1.expire(KeyName.STR_EMAIL_CODE + user.id, 6000);
     }
 
-	/**
-	 * 注册用户接口Service
-	 * @param userName 用户名
-	 * @param passWord 密码
-	 */
+    /**
+     * 注册用户接口Service
+     * @param userName 用户名
+     * @param passWord 密码
+     */
     public async insert(user: BaseUser) {
         // 验证用户名
         const userDao = getRepository(BaseUser);

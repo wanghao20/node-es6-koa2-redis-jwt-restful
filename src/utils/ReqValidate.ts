@@ -111,7 +111,7 @@ export class Validate {
     public static user(name: string, pwd: string) {
         // 暂时判断是否为空
         const schema = Joi.object({
-            "str1": Joi.string().min(3).max(10).required(),
+            "str1": Joi.string().min(3).max(15).required(),
             "str2": Joi.string().min(6).max(15).required(),
         });
         const { error, value } = schema.validate({ "str1": name, "str2": pwd });

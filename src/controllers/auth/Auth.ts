@@ -1,7 +1,7 @@
 
 import { Context } from "koa";
 
-import {  Paging } from "../../format/Type";
+import { Paging } from "../../format/Type";
 import { AccountService } from "../../service/Auth";
 import { Validate } from "../../utils/ReqValidate";
 import { ReturnResult } from "../../utils/ReturnResult";
@@ -16,19 +16,19 @@ import { BaseUser } from "../../entity/mysql/auth/BaseUser";
  * @desc：登陆注册Controllers
  */
 export default class AuthController {
-	/**
-	 * 逻辑处理service类
-	 */
+    /**
+     * 逻辑处理service类
+     */
     private readonly service: AccountService;
 
     constructor() {
         this.service = new AccountService();
     }
 
-	/**
-	 * 登录接口Controller
-	 * @param ctx koa中间件
-	 */
+    /**
+     * 登录接口Controller
+     * @param ctx koa中间件
+     */
     @post("/login")
     public async login(ctx: Context) {
         // 验证
@@ -51,10 +51,10 @@ export default class AuthController {
         return ctx.body = ReturnResult.successData(user);
     }
 
-	/**
+    /**
      * 退出登录
      * @param ctx koa中间件
-	 */
+     */
     @post("/logout")
     public async register(ctx: Context) {
         return ctx.body = ReturnResult.successData();
@@ -67,7 +67,7 @@ export default class AuthController {
     public async users(ctx: Context) {
         await Validate.verifyAuth(ctx.user.roles, "user");
         const paging: Paging = ctx.params;
-        paging.condition=JSON.parse(paging.condition);
+        paging.condition = JSON.parse(paging.condition);
         const users = await this.service.users(paging);
 
         return ctx.body = ReturnResult.successData(users);
@@ -189,10 +189,10 @@ export default class AuthController {
         return ctx.body = ReturnResult.successData(data);
 
     }
-     /**
-     * 修改模块信息
-     * @param ctx koa中间件
-     */
+    /**
+    * 修改模块信息
+    * @param ctx koa中间件
+    */
     @put("/Mod")
     public async updateMod(ctx: Context) {
         await Validate.verifyAuth(ctx.user.roles, "Mod");
@@ -222,6 +222,7 @@ export default class AuthController {
     public async deleteMod(ctx: Context) {
         await Validate.verifyAuth(ctx.user.roles, "Mod");
         const mod: BaseMod = ctx.params;
+        Validate.isId(mod.id);
         const data = await this.service.deleteMod(mod);
 
         return ctx.body = ReturnResult.successData(data);
@@ -246,7 +247,7 @@ export default class AuthController {
     public async rolesPage(ctx: Context) {
         await Validate.verifyAuth(ctx.user.roles, "role");
         const paging: Paging = ctx.params;
-        paging.condition=JSON.parse(paging.condition);
+        paging.condition = JSON.parse(paging.condition);
         const users = await this.service.rolesPage(paging);
 
         return ctx.body = ReturnResult.successData(users);
@@ -309,7 +310,8 @@ export default class AuthController {
     @get("/systemLog")
     public async systemLog(ctx: Context) {
         const paging: Paging = ctx.params;
-        paging.condition=JSON.parse(paging.condition);
+        Validate.isNumber(paging.page);
+        paging.condition = JSON.parse(paging.condition);
         const users = await this.service.systemLog(paging);
 
         return ctx.body = ReturnResult.successData(users);
